@@ -1,15 +1,11 @@
 import { Server } from "socket.io";
 
 export default function socketConnection(server) {
-    const io = new Server(server, {
-        cors: {
-            origin: "*"
-        }
-    });
+    const io = new Server(server);
 
     io.on("connection", (socket) => {
-        let username = "";
-        socket.emit("join", `${username}`);
+        // let username = "";
+        socket.emit("join", username);
 
         socket.on("message", (message) => {
             io.emit("message", {

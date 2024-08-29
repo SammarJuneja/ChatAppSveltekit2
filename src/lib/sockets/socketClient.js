@@ -2,4 +2,4 @@ import ioClient from "socket.io-client";
 
 const socket = ioClient("http://localhost:4000")
 
-export default socket;
+export const io = socket;

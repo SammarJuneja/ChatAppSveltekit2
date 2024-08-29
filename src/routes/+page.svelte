@@ -1,6 +1,6 @@
 <script>
     import { onMount } from "svelte";
-    import socket from "../lib/sockets/socketClient";
+    import {io} from "../lib/sockets/socketClient";
 
     const apiUrl = "http://localhost:4000";
     let username = "helllo";
@@ -12,7 +12,7 @@
     }
 
     onMount(() => {
-        socket.on("join", () => {
+        io.on("join", () => {
             console.log(`${username} just opened the app`);
         });
     });
