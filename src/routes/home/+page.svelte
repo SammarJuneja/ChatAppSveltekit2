@@ -1,6 +1,5 @@
 <script lang="ts">
   import Header from "../../lib/components/+Header.svelte";
-  import "../../app.css";
 
   const logo = "https://media.discordapp.net/attachments/916361716965707836/1277165337825251338/OpenChat.png?ex=66cc2c69&is=66cadae9&hm=7e62f9d41dbfb54c7857ee8826c900759630569fb5953adca4762a9480b90712&";
 </script>

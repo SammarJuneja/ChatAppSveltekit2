@@ -1,10 +1,7 @@
 <script lang="ts">
-    import "../../app.css";
-
     let username = "";
-    let email: string = "";
-    let password: string = "";
-
+    let email = "";
+    let password = "";
     async function signup() {
 
     }

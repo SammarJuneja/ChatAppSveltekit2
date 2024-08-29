@@ -1,7 +1,11 @@
 import { Server } from "socket.io";
 
-function socketConnection(server) {
-    const io = new Server(server);
+export default function socketConnection(server) {
+    const io = new Server(server, {
+        cors: {
+            origin: "*"
+        }
+    });
 
     io.on("connection", (socket) => {
         let username = "";
@@ -22,5 +26,3 @@ function socketConnection(server) {
         });
     });
 }
-
-module.exports = socketConnection;

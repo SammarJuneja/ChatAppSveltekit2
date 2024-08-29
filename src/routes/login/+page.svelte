@@ -1,8 +1,6 @@
 <script lang="ts">
-  import "../../app.css";
-
-  let email: string = "";
-  let password: string = "";
+  let email = "";
+  let password = "";
 
   async function login() {
 

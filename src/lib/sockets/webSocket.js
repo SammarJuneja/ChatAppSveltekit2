@@ -7,4 +7,4 @@ const websocket = {
     }
 }
 
-module.exports = websocket;
+export default websocket;

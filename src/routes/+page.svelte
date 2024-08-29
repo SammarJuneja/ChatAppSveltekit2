@@ -1,12 +1,9 @@
 <script>
     import { onMount } from "svelte";
-    import "../app.css";
-    import { io } from "../lib/sockets/socketClient";
+    import socket from "../lib/sockets/socketClient";
 
     const apiUrl = "http://localhost:4000";
     let username = "helllo";
-
-    // let token = localStorage.getItem("token");
 
     async function user() {
         const response = await fetch(`${apiUrl}/`, {
@@ -15,10 +12,10 @@
     }
 
     onMount(() => {
-        io.on("join", () => {
+        socket.on("join", () => {
             console.log(`${username} just opened the app`);
         });
-    })
+    });
 </script>
 
 <div class="bg-app-bg min-h-screen grid justify-center items-center">
