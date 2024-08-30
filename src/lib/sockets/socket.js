@@ -1,10 +1,10 @@
 import { Server } from "socket.io";
 
-export default function socketConnection(server) {
+function socketConnection(server) {
     const io = new Server(server);
 
     io.on("connection", (socket) => {
-        // let username = "";
+        let username = "test";
         socket.emit("join", username);
 
         socket.on("message", (message) => {
@@ -22,3 +22,5 @@ export default function socketConnection(server) {
         });
     });
 }
+
+export default socketConnection;

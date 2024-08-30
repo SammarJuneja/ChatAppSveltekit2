@@ -1,4 +1,4 @@
-import socketConnection from "./socket";
+import socketConnection from "./socket.js";
 
 const websocket = {
     name: "webSocket",

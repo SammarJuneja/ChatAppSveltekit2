@@ -1,13 +1,13 @@
-const mongoose = require("mongoose");
+import { Schema, Types, model } from "mongoose";
 
-const chatSchema = new mongoose.Schema({
+const chatSchema = new Schema({
   participants: [{
-    type: mongoose.Types.ObjectId,
+    type: Types.ObjectId,
     ref: 'User',
     required: true
   }],
   lastMessage: {
-    type: mongoose.Types.ObjectId,
+    type: Types.ObjectId,
     ref: 'Message'
   },
   lastMessageDate: {
@@ -16,6 +16,6 @@ const chatSchema = new mongoose.Schema({
   }
 });
 
-const Chat = mongoose.model("Chat", chatSchema);
+const Chat = model("Chat", chatSchema);
 
-module.exports = Chat;
+export default Chat;

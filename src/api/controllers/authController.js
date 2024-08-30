@@ -1,8 +1,8 @@
-const { signAccessToken, signRefreshToken } = require("../../stores/store");
-const User = require("$lib/modals/user");
-const bcrypt = require("bcrypt");
+import { signAccessToken, signRefreshToken } from "../../stores/store";
+import User from "../../lib/modals/user";
+import { compare, hashSync } from "bcrypt";
 
-const login = async (req, res) => {
+exports.login = async (req, res) => {
     const { email, password } = req.body;
 
     if (!email && !password) {
@@ -21,7 +21,7 @@ const login = async (req, res) => {
         });
     }
 
-    const decodedPass = await bcrypt.compare(password, user.password);
+    const decodedPass = await compare(password, user.password);
 
     if (!decodedPass) {
         res.status(500).json({
@@ -40,7 +40,7 @@ const login = async (req, res) => {
 }
 
 
-const register = async (req, res) => {
+exports.register = async (req, res) => {
     const { username, email, password } = req.body;
     const emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
     const passRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?\d)(?=.*?[#?!@$%^&*-]).{8,}$/;
@@ -77,7 +77,7 @@ const register = async (req, res) => {
       });
     }
     
-    const hashedPassword = bcrypt.hashSync(password, 10);
+    const hashedPassword = hashSync(password, 10);
   
     const user = await User.create({
         username,
@@ -93,14 +93,12 @@ const register = async (req, res) => {
       "accessToken": accessToken,
       "refreshToken": refreshToken
     });
-  };
+  }
 
-  const generateRefreshToken = async (req, res) => {
+  exports.generateRefreshToken = async  = async (req, res) => {
   
-  };
+  }
   
-  const generateAccessToken = async (req, res) => {
+  exports.generateAccessToken = async (req, res) => {
   
-  };
-
-  module.exports = { login, register, generateAccessToken, generateRefreshToken }
+  }

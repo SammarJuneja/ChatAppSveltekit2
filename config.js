@@ -1,4 +1,5 @@
-require("dotenv").config();
+import { config as dotenvConfig } from "dotenv";
+dotenvConfig()
 
 const config = {
     "MONGO": process.env.MONGO_URI,

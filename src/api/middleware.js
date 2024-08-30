@@ -1,6 +1,6 @@
-const jwt = require("jsonwebtoken");
-const { important } = require("../stores/store");
-const User = require("$lib/modals/user");
+import jwt from"jsonwebtoken";
+import config from "../../config.js";
+import User from "../lib/modals/user.js";
 
 const authMiddleware = async (req, res, next) => {
     const authHeader = req.headers.authorization;
@@ -16,7 +16,7 @@ const authMiddleware = async (req, res, next) => {
     }
 
     try {
-        jwt.verify(token, important.jwtAccess, async (err, tok) => {
+        jwt.verify(token, config.jwtAccess, async (err, tok) => {
             if (err) {
                 return res.status(401).json({ "error": "Invalid or expired token" });
             }
@@ -37,5 +37,4 @@ const authMiddleware = async (req, res, next) => {
         console.log(error)
     }
 }
-
-module.exports = authMiddleware;
+export default authMiddleware;

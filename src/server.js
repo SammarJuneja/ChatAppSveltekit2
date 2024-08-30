@@ -1,10 +1,10 @@
-import socketConnection from "./lib/sockets/socket";
+import socketConnection from "./lib/sockets/socket.js";
 import { createServer } from "http";
 import express, { json } from "express";
-import auth from "../api/auth/index";
-import chat from "../api/chat/index";
-import { handler } from "../build/handler";
-import { connectDB } from "./stores/store";
+import {router as auth} from "./api/chat/index.js";
+import {router as chat} from "./api/chat/index.js";
+import {handler} from "../build/handler.js";
+import { connectDB } from "./stores/store.js";
 
 const app = express();
 

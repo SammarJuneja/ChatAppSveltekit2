@@ -1,8 +1,8 @@
-const { Router } = require("express");
-const { body, query, oneOf } = require("express-validator");
+import { Router } from"express";
+import { body, query, oneOf } from"express-validator";
 const router = Router();
-const { login, register } = require("../controllers/authController");
-const User = require("$lib/modals/user");
+import { login, register } from "../controllers/authController";
+import User from "../../lib/modals/user";
 
 const passwordRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?\d)(?=.*?[#?!@$%^&*-]).{8,}$/;
 
@@ -84,4 +84,4 @@ router.post(
     login
 );
 
-module.exports = router;
+export {router};

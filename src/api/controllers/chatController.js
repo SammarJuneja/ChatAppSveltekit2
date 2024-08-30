@@ -1,11 +1,11 @@
-const Chat = require("$lib/modals/chat");
-const Message = require("$lib/modals/message");
-const User = require("$lib/modals/user");
+import Chat from "../../lib/modals/chat.js";
+import Message from "../../lib/modals/message.js";
+import User from "../../lib//modals/user.js";
 
-const getUserChats = async (req, res) => {
+exports.getUserChats = async (req, res) => {
     try {
       const { userId } = req.params;
-      const userGet = await Chat.find({
+      const userGet = await find({
         participants: {
           $in: userId
         }
@@ -21,12 +21,12 @@ const getUserChats = async (req, res) => {
     }
   }
   
-  const startChat = async (req, res) => {
+  exports.startChat = async (req, res) => {
     try {
       const { userid } = req.body;
       const loggedUser = req.userId
       const users = [loggedUser, userid]
-      const chatGet = await Chat.find({
+      const chatGet = await find({
         _id: {
           $in: users
         }
@@ -47,10 +47,10 @@ const getUserChats = async (req, res) => {
     }
   }
   
-  const sendMessage = async (req, res) => {
+  exports.sendMessage = async (req, res) => {
     try {
       const { chatId, message } = req.body;
-      const chatGet = await Chat.findOne({
+      const chatGet = await findOne({
         _id: chatId
       });
   
@@ -70,7 +70,7 @@ const getUserChats = async (req, res) => {
     }
   }
   
-  const addReaction = async (req, res) => {
+  exports.addReaction = async (req, res) => {
     try {
       const { messageId, reaction } = req.body;
       const messageGet = Message.findOne({
@@ -94,7 +94,7 @@ const getUserChats = async (req, res) => {
     }
   }
   
-  const editMessage = async (req, res) => {
+  exports.editMessage = async (req, res) => {
     try {
       const { messageId, message } = req.body;
       const messageGet = Message.findOne({
@@ -118,7 +118,7 @@ const getUserChats = async (req, res) => {
     }
   }
   
-  const deleteMessage = async (req, res) => {
+  exports.deleteMessage = async  = async (req, res) => {
     try {
       const { messageId } = req.params;
       const messageGet = await Message.deleteOne({ _id: messageId });
@@ -132,5 +132,3 @@ const getUserChats = async (req, res) => {
       res.status(500).json({ error: "Internal server error" });
     }
   }
-
-  module.exports = { getUserChats, startChat, sendMessage, addReaction, editMessage, deleteMessage}
