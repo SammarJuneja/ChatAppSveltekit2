@@ -25,7 +25,7 @@ export const apiUrl = "http://localhost:4000";
 export const JWT_ACCESS_TOKEN = important.jwtAccess.secret;
 export const JWT_REFRESH_TOKEN = important.jwtRefresh.secret;
 
-export const signAccessToken = (payload, expiresIn = "15m") => {
+export const signAccessToken = (payload, expiresIn = "1h") => {
     return jwt.sign(payload, JWT_ACCESS_TOKEN, { expiresIn });
 }
 

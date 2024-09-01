@@ -1,8 +1,8 @@
-import { signAccessToken, signRefreshToken } from "../../stores/store";
-import User from "../../lib/modals/user";
+import { signAccessToken, signRefreshToken } from "../../stores/store.js";
+import User from "../../lib/modals/user.js";
 import { compare, hashSync } from "bcrypt";
 
-exports.login = async (req, res) => {
+const login = async (req, res) => {
     const { email, password } = req.body;
 
     if (!email && !password) {
@@ -11,7 +11,7 @@ exports.login = async (req, res) => {
         });
     }
 
-    const user = User.findOne({
+    const user = await User.findOne({
         "email": email
     });
 
@@ -20,6 +20,7 @@ exports.login = async (req, res) => {
             "error": "Username with that email was not found"
         });
     }
+    console.log(password, email, user.password, user.email);
 
     const decodedPass = await compare(password, user.password);
 
@@ -29,8 +30,8 @@ exports.login = async (req, res) => {
         });
     }
 
-    const accessToken = signAccessToken(user);
-    const refreshToken = signRefreshToken(user);
+    const accessToken = signAccessToken({ "username": user.username });
+    const refreshToken = signRefreshToken({ "username": user.username });
     
     res.status(200).json({
         "message": "You are logged in successfully",
@@ -40,9 +41,9 @@ exports.login = async (req, res) => {
 }
 
 
-exports.register = async (req, res) => {
+const register = async (req, res) => {
     const { username, email, password } = req.body;
-    const emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     const passRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?\d)(?=.*?[#?!@$%^&*-]).{8,}$/;
   
     if (!username || !email || !password) {
@@ -84,9 +85,10 @@ exports.register = async (req, res) => {
         email,
         password: hashedPassword
     });
+    user.save();
   
-    const accessToken = signAccessToken(user);
-    const refreshToken = signRefreshToken(user);
+    const accessToken = signAccessToken({ "username": user.username });
+    const refreshToken = signRefreshToken({ "username": user.username });
   
     res.status(200).json({
       "message": `Your account is successfully created by username ${username}`,
@@ -95,10 +97,12 @@ exports.register = async (req, res) => {
     });
   }
 
-  exports.generateRefreshToken = async  = async (req, res) => {
+  const generateRefreshToken = async (req, res) => {
   
   }
   
-  exports.generateAccessToken = async (req, res) => {
+  const generateAccessToken = async (req, res) => {
   
   }
+
+  export { login, register, generateAccessToken, generateRefreshToken };

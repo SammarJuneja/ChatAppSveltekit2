@@ -1,10 +1,23 @@
 import { Router } from"express";
 import { body, query, oneOf } from"express-validator";
 const router = Router();
-import { login, register } from "../controllers/authController";
-import User from "../../lib/modals/user";
+import { login, register } from "../controllers/authController.js";
+import User from "../../lib/modals/user.js";
 
 const passwordRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?\d)(?=.*?[#?!@$%^&*-]).{8,}$/;
+
+const dummyProfile = {
+  "username": "helllsswdwwddndsd",
+  "email": "okolosdsddll1@gmail.com",
+  "password": "182722@sasaS",
+  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImhlbGxsc3N3ZHd3ZGRuZHNkIiwiaWF0IjoxNzI1MTg2MDc5LCJleHAiOjE3MjUxODk2Nzl9.g_Ze4QobKHBjV6G6h2nCRoxQyV1QHlevL9uIoIQ1He0",
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImhlbGxsc3N3ZHd3ZGRuZHNkIiwiaWF0IjoxNzI1MTg2MDc5LCJleHAiOjE3MjU3OTA4Nzl9.aDDnaUHhGuF5FiiH9IuJjqN8akm-KwNqFwUUiwJv8UA"
+};
+
+// "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImhlbGxsc3N3ZHd3ZGRuZHNkIiwiaWF0IjoxNzI1MTg3MDAyLCJleHAiOjE3MjUxOTA2MDJ9.ngNn9MKcm7NiN97yHIcleSpSITYk_DFD4tpZzIRrjyc",
+//   "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImhlbGxsc3N3ZHd3ZGRuZHNkIiwiaWF0IjoxNzI1MTg3MDAyLCJleHAiOjE3MjU3OTE4MDJ9.F5W1H9PFn0WgE-E32U7h4iuAPtxKlTxOuGvDy79mC_Y"
+// }
+
 
 router.post(
     '/register',
@@ -84,4 +97,4 @@ router.post(
     login
 );
 
-export {router};
+export { router };

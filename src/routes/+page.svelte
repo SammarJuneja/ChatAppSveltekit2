@@ -1,20 +1,23 @@
 <script>
     import { onMount } from "svelte";
-    import {io} from "../lib/sockets/socketClient";
+    import { io } from "socket.io-client";
+    // import { apiUrl } from "../stores/store";
+    // import { io } from "../lib/sockets/socketClient";
+    
+    const socket = io()
+    let username = `User ${Math.floor(Math.random() * 100)}`;
 
-    const apiUrl = "http://localhost:4000";
-    let username = "helllo";
-
-    async function user() {
-        const response = await fetch(`${apiUrl}/`, {
+    // async function user() {
+    //     const response = await fetch(`${apiUrl}/`, {
             
-        });
-    }
+    //     });
+    // }
 
     onMount(() => {
-        io.on("join", () => {
+        socket.on("join", () => {
             console.log(`${username} just opened the app`);
         });
+        socket.emit("join", "ehllo")
     });
 </script>
 
