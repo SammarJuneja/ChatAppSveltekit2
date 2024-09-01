@@ -1,10 +1,38 @@
 <script lang="ts">
+  const apiUrl = "http://localhost:3000/api/v1";
   let email = "";
   let password = "";
+  let errorMessage = "";
+  let token = "token";
 
   async function login() {
+  try {
+    const response = await fetch(`${apiUrl}/auth/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        email: email,
+        password: password
+      }),
+    });
 
+    if (!response.ok) {
+      const errorData = await response.json();
+      errorMessage = "There was an error while logging in";
+      throw new Error(errorData.message || "There was an error while logging in");
+    }
+    
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Login error:", error.message);
+    return { error: error.message };
   }
+}
+
 </script>
 
 <div class="bg-app-bg min-h-screen grid items-center justify-center">
