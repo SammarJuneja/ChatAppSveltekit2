@@ -1,4 +1,5 @@
-<script lang="ts">
+<script>
+  import { goto } from "$app/navigation";
   const apiUrl = "http://localhost:3000/api/v1";
   let email = "";
   let password = "";
@@ -25,13 +26,14 @@
       }
     
       const data = await response.json();
+      goto("/home");
+      localStorage.setItem("token", data.refreshToken);
       return data;
     } catch (error) {
       console.error("Login error:", error.message);
       return { error: error.message };
     }
 }
-
 </script>
 
 <div class="bg-app-bg min-h-screen grid items-center justify-center">
