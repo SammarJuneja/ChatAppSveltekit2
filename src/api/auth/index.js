@@ -5,7 +5,11 @@ import { login, register } from "../controllers/authController.js";
 import User from "../../lib/modals/user.js";
 
 const passwordRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?\d)(?=.*?[#?!@$%^&*-]).{8,}$/;
-
+//  {
+//   "message": "You are logged in successfully",
+//   "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImhlbGxsc3N3ZHd3ZGRuZHNkIiwiaWF0IjoxNzI1MzgxMjYzLCJleHAiOjE3MjUzODQ4NjN9.s9hrBFIJ3fpuRChUJc622Z1YnIlQQNZv-KNnQ1RD1_8",
+//   "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImhlbGxsc3N3ZHd3ZGRuZHNkIiwiaWF0IjoxNzI1MzgxMjYzLCJleHAiOjE3MjU5ODYwNjN9.NmFJ43AAIfXTMaRXPTlesveWNAl5vjmejB8DJwrEBTA"
+// }
 const dummyProfile = {
   "username": "helllsswdwwddndsd",
   "email": "okolosdsddll1@gmail.com",

@@ -6,31 +6,30 @@
   let token = "token";
 
   async function login() {
-  try {
-    const response = await fetch(`${apiUrl}/auth/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`
-      },
-      body: JSON.stringify({
-        email: email,
-        password: password
-      }),
-    });
+    try {
+      const response = await fetch(`${apiUrl}/auth/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: email,
+          password: password
+        }),
+      });
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      errorMessage = "There was an error while logging in";
-      throw new Error(errorData.message || "There was an error while logging in");
-    }
+      if (!response.ok) {
+        const errorData = await response.json();
+        errorMessage = "There was an error while logging in";
+        throw new Error(errorData.message || "There was an error while logging in");
+      }
     
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Login error:", error.message);
-    return { error: error.message };
-  }
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error("Login error:", error.message);
+      return { error: error.message };
+    }
 }
 
 </script>
@@ -42,10 +41,10 @@
       <input bind:value={password} class="bg-login-button rounded-lg text-white outline-none p-3 hover:border-2 hover:border-slate-400 hover:transition-all mt-5" placeholder="Password" type="password" required />
     </div>
     <div class="grid mt-10 justify-center">
-      <button class="p-2 w-40 bg-login-button text-white rounded-lg hover:bg-signup-button">
+      <button on:click={login} class="p-2 w-40 bg-login-button text-white rounded-lg hover:bg-signup-button">
         Login
       </button>
-      <button on:click={login} class="text-sm text-white hover:text-blue-200">
+      <button class="text-sm text-white hover:text-blue-200">
         Forgot password?
       </button>
     </div>

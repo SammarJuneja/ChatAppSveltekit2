@@ -20,7 +20,6 @@ const login = async (req, res) => {
             "error": "Username with that email was not found"
         });
     }
-    console.log(password, email, user.password, user.email);
 
     const decodedPass = await compare(password, user.password);
 
