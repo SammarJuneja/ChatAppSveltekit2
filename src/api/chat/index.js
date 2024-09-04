@@ -3,21 +3,21 @@ import Message from "../../lib/modals/message.js";
 import User from "../../lib/modals/user.js";
 import authMiddleware from "../middleware.js";
 import { getUserChats, startChat, sendMessage, editMessage, addReaction, deleteMessage } from "../controllers/chatController.js";
-import { Router } from"express";
-import { body } from"express-validator";
+import { Router } from "express";
+import { body } from "express-validator";
 
 const router = Router();
 // chat id 665c52fa0e66697107164be2
 // user id 665c52570e66697107164bda
 
 router.get(
-  "/chat/:userId", 
+  "/get/user/chat/:userId", 
 //   authMiddleware,
   getUserChats
 );
 
 router.post(
-  "/start-chat",
+  "/chat/start",
   [
     body("userid")
     .notEmpty().withMessage("User was not found")
@@ -30,12 +30,12 @@ router.post(
       }
     }),
   ],
-  authMiddleware, 
+  // authMiddleware, 
   startChat
 );
 
 router.post(
-  "/send-message",
+  "/message/send",
   [
     body("chatId")
     .trim().escape()
@@ -57,7 +57,7 @@ router.post(
 );
 
 router.put(
-  "/add-reaction",
+  "/reaction/add",
   [
     body("messageId")
     .trim().escape()
@@ -79,7 +79,7 @@ router.put(
 );
 
 router.put(
-  "/edit-message",
+  "/message/edit",
   [
     body("messageId")
     .trim().escape()
@@ -100,9 +100,9 @@ router.put(
 );
 
 router.delete(
-  "/delete-message/:messageId",
+  "/message/delete/:messageId",
   authMiddleware,
   deleteMessage
 );
 
-export {router};
+export { router };

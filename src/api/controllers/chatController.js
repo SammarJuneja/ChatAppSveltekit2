@@ -23,8 +23,7 @@ const getUserChats = async (req, res) => {
   
   const startChat = async (req, res) => {
     try {
-      const { userid } = req.body;
-      const loggedUser = req.userId;
+      const { userid, loggedUser } = req.body;
       const users = [loggedUser, userid]
       const chatGet = await Chat.find({
         _id: {
