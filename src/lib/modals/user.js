@@ -36,6 +36,10 @@ const userSchema = new Schema({
     }],
     default: []
   },
+  chats: {
+    type: [String],
+    default: []
+  },
   groups: {
     type: [{
       type: Schema.Types.ObjectId,

@@ -5,15 +5,13 @@ import User from "../../lib//modals/user.js";
 const getUserChats = async (req, res) => {
     try {
       const { userId } = req.params;
-      const userGet = await Chat.findOne({
-        participants: {
-          $in: userId
-        }
+      const userGet = await User.findOne({
+        _id: userId
       });
       if (!userGet) {
         res.status(404).json({ error: "User has no chats"});
       } else {
-        res.status(200).json({ userGet });
+        res.status(200).json({ chat: userGet.chats });
       }
     } catch (error) {
       console.log(error)
@@ -38,6 +36,20 @@ const getUserChats = async (req, res) => {
           participants: users
         });
         await newChat.save()
+        await User.updateOne({
+          _id: loggedUser
+        }, {
+          $push: {
+            chats: userid
+          }
+        });
+        await User.updateOne({
+          _id: userid
+        }, {
+          $push: {
+            chats: loggedUser
+          }
+        });
         res.status(200).json({ newChat });
       }
     } catch (error) {

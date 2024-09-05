@@ -4,12 +4,12 @@ import User from "../../lib/modals/user.js";
 import authMiddleware from "../middleware.js";
 import { Router } from "express";
 import { body, oneOf } from 'express-validator';
-import { getUser, getAllUsers, modifyUser, getUserChats } from "../controllers/userController.js";
+import { getUser, getAllUsers, modifyUser, getUserChats, getUserFriends } from "../controllers/userController.js";
 
 const router = Router();
 
 router.get(
-  "/get/user/:userId", 
+  "/get/:userId", 
 //   authMiddleware,
   getUser
 );
@@ -24,6 +24,11 @@ router.get(
 //   authMiddleware,
   getAllUsers
 );
+
+router.get(
+  "/get/friends/:userId",
+  getUserFriends
+)
 
 router.post(
   "/user/edit",

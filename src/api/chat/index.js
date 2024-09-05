@@ -11,13 +11,13 @@ const router = Router();
 // user id 665c52570e66697107164bda
 
 router.get(
-  "/get/user/chat/:userId", 
+  "/get/:userId", 
 //   authMiddleware,
   getUserChats
 );
 
 router.post(
-  "/chat/start",
+  "/start",
   [
     body("userid")
     .notEmpty().withMessage("User was not found")

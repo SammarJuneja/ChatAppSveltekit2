@@ -1,7 +1,7 @@
 import { validationResult } from "express-validator";
 import User from "../../lib/modals/user.js";
 
-const getUser = async (req, res) =>{
+const getUser = async (req, res) => {
   try {
     const { userId } = req.params;
     const userGet = await User.findOne({
@@ -14,7 +14,7 @@ const getUser = async (req, res) =>{
       res.status(200).json({ userGet });
     }
   } catch (err) {
-    res.status(500).json({ message: 'Internal Server Error' });
+    res.status(500).json({ message: "Internal Server Error" });
   }
 }
 
@@ -28,13 +28,32 @@ const getUserChats = async (req, res) => {
         if (!userGet) {
             res.status(404).json({ error: "User not found" });
         } else if (!userGet.friends) {
-            res.status(404).json({ error: "User has no friends" });
+            res.status(404).json({ error: "User has no chats" });
         } else {
-            res.status(200).json({ friends: userGet.friends });
+            res.status(200).json({ friends: userGet.chats });
         }
     } catch (err) {
         res.status(500).json({ message: "Internal Server Error" });
     }
+}
+
+const getUserFriends = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const userGet = await User.findOne({
+      _id: userId
+    });
+
+    if (!userGet) {
+      res.status(404).json({ error: "User not found" });
+    } else if (!userGet.friends) {
+      res.status(404).json({ error: "User has no friends" });
+    } else {
+      res.status(200).json({ friends: userGet.friends });
+    }
+  } catch (err) {
+    res.status(500).json({ message: "Internal Server Error" });
+  }
 }
 
 const getAllUsers = async (req, res) => {
@@ -42,7 +61,7 @@ const getAllUsers = async (req, res) => {
     const users = await find();
     res.status(200).json({ users });
   } catch (err) {
-    res.status(500).json({ message: 'Internal Server Error' });
+    res.status(500).json({ message: "Internal Server Error" });
   }
 }
 
@@ -78,4 +97,4 @@ const modifyUser = async (req,res) => {
   res.status(200).json({ message: 'Success', data: result });
 }
 
-export { getUser, getAllUsers, modifyUser, getUserChats };
+export { getUser, getAllUsers, modifyUser, getUserChats, getUserFriends };
