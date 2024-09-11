@@ -58,6 +58,7 @@ const getUserChats = async (req, res) => {
     }
   }
   
+  
   const sendMessage = async (req, res) => {
     try {
       const { chatId, message } = req.body;

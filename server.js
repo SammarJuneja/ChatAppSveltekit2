@@ -17,11 +17,12 @@ app.use(cors({
 }));
 
 app.use(json());
-app.use("/api/v1/auth", auth);
-app.use("/api/v1/chat", chat);
-app.use("/api/v1/user", user);
 
-app.get("/test", async (req, res) => {
+app.use("/v1/auth", auth);
+app.use("/v1/chat", chat);
+app.use("/v1/user", user);
+
+app.get("/test", (req, res) => {
     res.send("he");
 });
 
