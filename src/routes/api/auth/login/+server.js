@@ -33,8 +33,8 @@ export async function POST({ request }) {
         });
     }
 
-    const accessToken = signAccessToken({ "username": user.username });
-    const refreshToken = signRefreshToken({ "username": user.username });
+    const accessToken = signAccessToken({ "userId": user._id });
+    const refreshToken = signRefreshToken({ "userId": user._id });
     
     return json({
         "status": 200,

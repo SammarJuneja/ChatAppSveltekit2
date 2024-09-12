@@ -3,8 +3,7 @@
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
-		"dev": "concurrently \"vite dev\" \"npm run start:server\"",
-		"start:server": "nodemon server.js",
+		"dev": "vite dev",
 		"build": "vite build",
 		"preview": "vite preview"
 	},

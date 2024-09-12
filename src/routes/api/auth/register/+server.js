@@ -1,18 +1,19 @@
 import { json } from '@sveltejs/kit';
-import { signAccessToken, signRefreshToken } from "../../../../stores/store.js";
+import { connectDB, signAccessToken, signRefreshToken } from "../../../../stores/store.js";
 import User from "../../../../lib/modals/user.js";
 import { hashSync } from "bcrypt";
 
 export async function POST({ request }) {
-    const { username, email, password } = request.body;
+    connectDB();
+    const { username, email, password } = await  request.json();
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     const passRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?\d)(?=.*?[#?!@$%^&*-]).{8,}$/;
+    console.log(email, username, password)
   
     if (!username || !email || !password) {
         return json({
-            "status": 401,
             "error": "Please fill all the details"
-        });
+        }, { "status": 400 });
     }
   
     if (!emailRegex.test(email) || !passRegex.test(password)) {
@@ -53,8 +54,8 @@ export async function POST({ request }) {
     });
     user.save();
   
-    const accessToken = signAccessToken({ "username": user.username });
-    const refreshToken = signRefreshToken({ "username": user.username });
+    const accessToken = signAccessToken({ "userId": user._id });
+    const refreshToken = signRefreshToken({ "userId": user._id  });
   
     return json({
         "status": 200,
