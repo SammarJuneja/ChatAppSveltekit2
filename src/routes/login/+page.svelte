@@ -1,11 +1,10 @@
 <script>
   import { goto } from "$app/navigation";
-  import { jwtDecode } from "jwt-decode";
-  const apiUrl = "http://localhost:3000/api/v1";
+  
   let email = "";
   let password = "";
   let errorMessage = "";
-  let token = "token";
+  const apiUrl = "http:localhost:4000/api";
 
   async function login() {
     try {
@@ -28,8 +27,7 @@
     
       const data = await response.json();
       goto("/home");
-      const decodedToken = jwtDecode(data.refreshToken);
-      localStorage.setItem("user", decodedToken.username);
+      localStorage.setItem("token", data.accessToken);
       return data;
     } catch (error) {
       console.error("Login error:", error.message);

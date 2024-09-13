@@ -1,6 +1,7 @@
 import { json, error } from "@sveltejs/kit";
 import { connectDB, verifyAccessToken } from "./stores/store";
-
+import config from "../config";
+import jwt from "jsonwebtoken"
 
 export async function handle({ event, resolve }) {
     console.log(2)
@@ -21,8 +22,11 @@ export async function handle({ event, resolve }) {
             return json({ error: "Authentication token is missing" }, { status: 401 });
         }
 
+        console.log(token)
+
         try {
-            const decodedToken = verifyAccessToken(token);
+            const decodedToken = jwt.verify(token, config.JWT_ACCESS_SECRET);
+            console.log(decodedToken)
 
             if (decodedToken) {
                 console.log('Decoded Token:', decodedToken);

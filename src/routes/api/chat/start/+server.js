@@ -17,7 +17,7 @@ export async function POST({ request, locals }) {
       });
 
       if (chatGet.length === 2) {
-        return json({ chatGet });
+        return json({ chatGet }, { status: 200 });
       } else {
         const newChat = new Chat({
           participants: users

@@ -1,6 +1,7 @@
 <script>
   import { onMount } from "svelte";
   import Header from "../../lib/components/+Header.svelte";
+  import { jwtDecode } from "jwt-decode";
 
 const dummy = {
   "userGet": {
@@ -14,30 +15,29 @@ const dummy = {
   }
 }
 
-  let loggedUser;
   let chats = { participants: [] };
-  let user;
-  const apiUrl = "http://localhost:4000/api/v1";
-  // const logo = "https://media.discordapp.net/attachments/916361716965707836/1277165337825251338/OpenChat.png?ex=66cc2c69&is=66cadae9&hm=7e62f9d41dbfb54c7857ee8826c900759630569fb5953adca4762a9480b90712&";
+  let token;
+  const apiUrl = "http://localhost:4000/api";
 
-  async function getUser(id) {
-    const response = await fetch(`${apiUrl}/user/get/${id}`);
-    const data = await response.json();
-    return data;
-  }
-
-  async function getUserChats(id) {
-    const response = await fetch(`${apiUrl}/chat/get/${id}`);
-    const data = await response.json();
-    return data;
-  }
 
   onMount(async() => {
     if (typeof window !== "undefined") {
       try {
-          loggedUser = await getUser("66d4401f7c39811a0e3ad0c5");
+        token = localStorage.getItem("token");
+        if (token) {
+          async function getUserChats(id) {
+            const response = await fetch(`${apiUrl}/chat/get/${id}`, {
+              method: "GET",
+              headers: {
+              "Content-Type": "application/json",
+              Authorization: `${token}`,
+            },
+            });
+            const data = await response.json();
+            return data;
+          }
           chats = await getUserChats("66d4401f7c39811a0e3ad0c5");
-          console.log(chats)
+        }
       } catch (error) {
         console.error(error);
       }
