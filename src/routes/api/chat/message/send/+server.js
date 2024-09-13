@@ -3,7 +3,11 @@ import Message from "../../../../../lib/modals/message.js";
 
 export async function POST({ request }) {
     try {
-      const { chatId, message, userId } = request.body;
+      if (!locals.userId) {
+        return json({ error: "Unauthorized" }, { status: 401 });
+      }
+
+      const { chatId, message } = request.json();
       const chatGet = await Chat.findOne({
         _id: chatId
       });
@@ -14,7 +18,7 @@ export async function POST({ request }) {
         const newMessage = new Message({
           chatId,
           message,
-          sender: request.userId
+          sender: locals.userId
         });
         await newMessage.save();
         return json({ "message": newMessage })

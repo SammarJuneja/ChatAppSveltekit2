@@ -1,9 +1,13 @@
 import { json } from "@sveltejs/kit";
 import Message from "../../../../../lib/modals/message";
 
-export async function PUT({ request }) {
+export async function PUT({ request, locals }) {
     try {
-      const { messageId, message } = request.body;
+      if (!locals.userId) {
+        return json({ error: "Unauthorized" }, { status: 401 });
+      }
+      
+      const { messageId, message } = request.json();
       const messageGet = await Message.findOne({
         _id: messageId
       });

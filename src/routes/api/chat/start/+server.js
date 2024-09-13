@@ -2,16 +2,20 @@ import { json } from '@sveltejs/kit';
 import User from "../../../../lib/modals/user.js";
 import Chat from "../../../../lib/modals/chat.js";
 
-export async function POST({ request }) {
+export async function POST({ request, locals }) {
     try {
-      const { userid, loggedUser } = request.body;
-      const users = [loggedUser, userid]
+      if (!locals.userId) {
+        return json({ error: "Unauthorized" }, { status: 401 });
+      }
+
+      const { loggedUser } = request.json();
+      const users = [loggedUser, locals.userId]
       const chatGet = await Chat.find({
         _id: {
           $in: users
         }
       });
-  
+
       if (chatGet.length === 2) {
         return json({ chatGet });
       } else {
@@ -23,20 +27,20 @@ export async function POST({ request }) {
           _id: loggedUser
         }, {
           $push: {
-            chats: userid
+            chats: locals.userId
           }
         });
         await User.updateOne({
-          _id: userid
+          _id: locals.userId
         }, {
           $push: {
             chats: loggedUser
           }
         });
-        return json({ newChat });
+        return json({ newChat }, { status: 200 });
       }
     } catch (error) {
       console.log(error)
-      return json({ "error": "Internal server error" });
+      return json({ "error": "Internal server error" }, { status: 500 });
     }
 }
