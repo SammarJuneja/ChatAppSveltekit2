@@ -4,7 +4,7 @@
   let email = "";
   let password = "";
   let errorMessage = "";
-  const apiUrl = "http:localhost:4000/api";
+  const apiUrl = "http://localhost:4000/api";
 
   async function login() {
     try {
@@ -18,17 +18,18 @@
           password: password
         }),
       });
-
+      console.log(email, password)
       if (!response.ok) {
         const errorData = await response.json();
         errorMessage = "There was an error while logging in";
         throw new Error(errorData.message || "There was an error while logging in");
+      } else {
+        const data = await response.json();
+        goto("/home");
+        console.log(data)
+        localStorage.setItem("token", data.accessToken);
+        return data;
       }
-    
-      const data = await response.json();
-      goto("/home");
-      localStorage.setItem("token", data.accessToken);
-      return data;
     } catch (error) {
       console.error("Login error:", error.message);
       return { error: error.message };

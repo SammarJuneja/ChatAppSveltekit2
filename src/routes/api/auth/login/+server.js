@@ -4,33 +4,25 @@ import User from "../../../../lib/modals/user.js";
 import { compare } from "bcrypt";
 
 export async function POST({ request }) {
-    const { email, password } = request.body;
+    const data = await request.json();
+    console.log(data, "ehe");
 
-    if (!email && !password) {
-        return json({
-            "status": 401,
-            "error": "You didn\'t fill email and password"
-        });
+    if (!data.email && !data.password) {
+        return json({ "error": "You didn\'t fill email and password" }, { "status": 400 });
     }
 
     const user = await User.findOne({
-        "email": email
+        "email": data.email
     });
 
     if (!user) {
-        return json({
-            "status": 404,
-            "error": "Username with that email was not found"
-        });
+        return json({ "error": "Username with that email was not found" }, { status: 404 });
     }
 
-    const decodedPass = await compare(password, user.password);
+    const decodedPass = await compare(data.password, user.password);
 
     if (!decodedPass) {
-        return json({
-            "status": 401,
-            "error": "You entered wrong password"
-        });
+        return json({ "error": "You entered wrong password" }, { status: 400 });
     }
 
     const accessToken = signAccessToken({ "userId": user._id });

@@ -24,7 +24,10 @@ const dummy = {
     if (typeof window !== "undefined") {
       try {
         token = localStorage.getItem("token");
-        if (token) {
+        if (token !== null || token !== undefined) {
+          console.log(token)
+          const decodedToken = jwtDecode(token);
+          console.log(token, decodedToken)
           async function getUserChats(id) {
             const response = await fetch(`${apiUrl}/chat/get/${id}`, {
               method: "GET",
@@ -36,7 +39,7 @@ const dummy = {
             const data = await response.json();
             return data;
           }
-          chats = await getUserChats("66d4401f7c39811a0e3ad0c5");
+          chats = await getUserChats(decodedToken.userId);
         }
       } catch (error) {
         console.error(error);
@@ -59,6 +62,10 @@ const dummy = {
             </div>
           </a>
         {/each}
-        {/if}
+      {:else}
+        <div class="text-center">
+          <h2 class="text-white text-lg mt-2">You don't have any chats</h2>
+        </div>
+      {/if}
     </div>
   </div>
