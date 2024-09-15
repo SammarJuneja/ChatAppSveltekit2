@@ -1,5 +1,5 @@
 import { json, error } from "@sveltejs/kit";
-import { connectDB, verifyAccessToken } from "./stores/store";
+import { connectDB, verifyRefreshToken} from "./stores/store";
 import config from "../config";
 import jwt from "jsonwebtoken"
 
@@ -25,11 +25,13 @@ export async function handle({ event, resolve }) {
         console.log(token)
 
         try {
-            const decodedToken = jwt.verify(token, config.JWT_ACCESS_SECRET);
+            // const decodedToken = jwt.verify(token, config.JWT_REFRESH_SECRET);
+            const decodedToken = verifyRefreshToken(token);
             console.log(decodedToken)
 
             if (decodedToken) {
                 console.log('Decoded Token:', decodedToken);
+                console.log(decodedToken.userId)
                 event.locals.userId = decodedToken.userId;
                 console.log('Setting userId:', event.locals.userId);
             } else {

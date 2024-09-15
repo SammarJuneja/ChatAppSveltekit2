@@ -8,8 +8,9 @@ export async function POST({ request, locals }) {
         return json({ error: "Unauthorized" }, { status: 401 });
       }
 
-      const { loggedUser } = request.json();
-      const users = [loggedUser, locals.userId]
+      const { user } = await request.json();
+      console.log(user,"h")
+      const users = [user, locals.userId]
       const chatGet = await Chat.find({
         _id: {
           $in: users
@@ -23,20 +24,23 @@ export async function POST({ request, locals }) {
           participants: users
         });
         await newChat.save()
-        await User.updateOne({
-          _id: loggedUser
+        console.log(locals.userId.trim(),"h")
+        const updatef = await User.updateOne({
+          _id: locals.userid
+        }, {
+          $push: {
+            chats: user
+          }
+        });
+        
+        const up9 = await User.updateOne({
+          _id: user
         }, {
           $push: {
             chats: locals.userId
           }
         });
-        await User.updateOne({
-          _id: locals.userId
-        }, {
-          $push: {
-            chats: loggedUser
-          }
-        });
+        console.log(updatef, up9)
         return json({ newChat }, { status: 200 });
       }
     } catch (error) {

@@ -4,34 +4,36 @@
     let username = "";
     let email = "";
     let password = "";
+    const apiUrl = "http://localhost:4000/api"
 
     async function signup() {
         try {
             const response = await fetch(`${apiUrl}/auth/register`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                username: username,
-                email: email,
-                password: password
-            }),
-        });
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    username: username,
+                    email: email,
+                    password: password
+                }),
+            });
 
-        if (!response.ok) {
-            const errorData = await response.json();
-            errorMessage = "There was an error while registering";
-            throw new Error(errorData.message || "There was an error while registering");
-        }
-    
-            const data = await response.json();
-            goto("/home");
-            localStorage.setItem("token", data.refreshToken);
-            return data;
+            if (!response.ok) {
+                const errorData = await response.json();
+                errorMessage = "There was an error while registering";
+                throw new Error(errorData.message || "There was an error while registering");
+            } else {
+                const data = await response.json();
+                goto("/home");
+                localStorage.setItem("token", data.refreshToken);
+                console.log(data)
+                return data;
+            }
         } catch (error) {
-        console.error("Register error:", error.message);
-        return { error: error.message };
+            console.error(error.message);
+            return { error: error.message };
         }
     }
 </script>

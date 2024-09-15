@@ -18,7 +18,7 @@
           password: password
         }),
       });
-      console.log(email, password)
+
       if (!response.ok) {
         const errorData = await response.json();
         errorMessage = "There was an error while logging in";
@@ -27,14 +27,14 @@
         const data = await response.json();
         goto("/home");
         console.log(data)
-        localStorage.setItem("token", data.accessToken);
+        localStorage.setItem("token", data.refreshToken);
         return data;
       }
     } catch (error) {
-      console.error("Login error:", error.message);
+      console.error(error.message);
       return { error: error.message };
     }
-}
+  }
 </script>
 
 <div class="bg-app-bg min-h-screen grid items-center justify-center">

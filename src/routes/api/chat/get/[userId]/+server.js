@@ -1,6 +1,7 @@
 import { json } from "@sveltejs/kit";
 import mongoose from "mongoose";
 import User from "../../../../../lib/modals/user.js";
+import Chat from "../../../../../lib/modals/chat.js";
 
 export async function GET({ params, locals }) {
     try {
@@ -9,7 +10,7 @@ export async function GET({ params, locals }) {
         }
         
         const { userId } = params;
-        console.log(userId)
+        console.log(userId, "id get")
         const userGet = await User.findOne({
             _id: userId
         });

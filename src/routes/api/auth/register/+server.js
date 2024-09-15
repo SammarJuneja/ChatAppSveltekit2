@@ -1,66 +1,55 @@
 import { json } from '@sveltejs/kit';
-import { connectDB, signAccessToken, signRefreshToken } from "../../../../stores/store.js";
+import { signAccessToken, signRefreshToken } from "../../../../stores/store.js";
 import User from "../../../../lib/modals/user.js";
 import { hashSync } from "bcrypt";
 
 export async function POST({ request }) {
-    connectDB();
-    const { username, email, password } = await  request.json();
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    const passRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?\d)(?=.*?[#?!@$%^&*-]).{8,}$/;
-    console.log(email, username, password)
+    try {
+        const data = await request.json();
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        const passRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?\d)(?=.*?[#?!@$%^&*-]).{8,}$/;
+        console.log(data.email, data.username, data.password)
   
-    if (!username || !email || !password) {
-        return json({
-            "error": "Please fill all the details"
-        }, { "status": 400 });
-    }
+        if (!data.username || !data.email || !data.password) {
+            return json({ "error": "Please fill all the details" }, { "status": 400 });
+        }
   
-    if (!emailRegex.test(email) || !passRegex.test(password)) {
-        return json({
-            "status": 401,
-            "error": "Your email or password is wrong, your password should contain one number and one special letter"
-        });
-    }
+        if (!emailRegex.test(data.email) && !passRegex.test(email.password)) {
+            return json({ "error": "Your email or password is invalid, your password should contain one number and one special letter" }, { status: 400 });
+        }
+        console.log(data.email)
   
-    const userEmailCheck = await User.findOne({
-        email,
-    });
+        const userEmailCheck = await User.findOne({ "email": data.email });
   
-    const userNameCheck = await User.findOne({
-        username,
-    });
+        const userNameCheck = await User.findOne({ "username": data.username });
   
-    if (userEmailCheck) {
-        return json({
-            "status": 500,
-            "error": "User with that email already exists"
-        });
-    }
+        if (userEmailCheck) {
+            return json({ "error": "User with that email already exists" }, { status: 500 });
+        }
   
-    if (userNameCheck) {
-        return json({
-            "status": 500,
-            "error": "Account with that username already exists"
-        });
-    }
+        if (userNameCheck) {
+            return json({ "error": "Account with that username already exists" }, { status: 400 });
+        }
     
-    const hashedPassword = hashSync(password, 10);
+        const hashedPassword = hashSync(data.password, 10);
   
-    const user = await User.create({
-        username,
-        email,
-        password: hashedPassword
-    });
-    user.save();
+        const user = await User.create({
+            username: data.username,
+            email: data.email,
+            password: hashedPassword
+        });
+        user.save();
   
-    const accessToken = signAccessToken({ "userId": user._id });
-    const refreshToken = signRefreshToken({ "userId": user._id  });
+        const accessToken = signAccessToken({ "userId": user._id });
+        const refreshToken = signRefreshToken({ "userId": user._id  });
   
-    return json({
-        "status": 200,
-        "message": `Your account is successfully created by username ${username}`,
-        "accessToken": accessToken,
-        "refreshToken": refreshToken
-    });
+        return json({
+            "message": `Your account is successfully created by username ${data.username}`,
+            "accessToken": accessToken,
+            "refreshToken": refreshToken
+        }, { status: 200 });
+    } catch (error) {
+        console.log(error);
+        return json({ error: "Internal server error" }, { status: 500});
+    }
 }
