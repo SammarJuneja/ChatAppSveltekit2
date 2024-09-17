@@ -23,24 +23,25 @@ export async function POST({ request, locals }) {
         const newChat = new Chat({
           participants: users
         });
-        await newChat.save()
-        console.log(locals.userId.trim(),"h")
-        const updatef = await User.updateOne({
-          _id: locals.userid
-        }, {
-          $push: {
-            chats: user
-          }
-        });
-        
-        const up9 = await User.updateOne({
+        await newChat.save();
+
+        await User.updateOne({
           _id: user
         }, {
           $push: {
             chats: locals.userId
           }
         });
-        console.log(updatef, up9)
+        
+        await User.updateOne({
+          _id: locals.userId
+        }, {
+          $push: {
+            chats: user
+          }
+        });
+        
+        console.log(locals.userId, user)
         return json({ newChat }, { status: 200 });
       }
     } catch (error) {
