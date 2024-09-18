@@ -1,60 +1,11 @@
-<script context="module">
-    export async function load({ params }) {
-        // const { userid } = params;
-        const us = params.userid
-
-        console.log('Params:', params); // This will help you see what is being passed
-        if (!userid) {
-            console.error('userid is undefined');
-        }
-        
-        return { us };
-    }
-</script>
-
 <script>
-    import { onMount } from "svelte";
-
     import Icon from "../../../ui/Icon.svelte";
     const logo = "https://media.discordapp.net/attachments/916361716965707836/1277165337825251338/OpenChat.png?ex=66cc2c69&is=66cadae9&hm=7e62f9d41dbfb54c7857ee8826c900759630569fb5953adca4762a9480b90712&";
-    let user;
-    export let us;
-    console.log(us, "hhhhsuuauua")
+
+    export let data;
     let message = "";
     let firstUser  = "";
     let secondUser = "";
-    const apiUrl = "http://localhost:4000/api";
-    let token;
-
-    async function getUser(id) {
-        const response = await fetch(`${apiUrl}/user/get/${id}`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-            },
-        });
-        const data = await response.json();
-        console.log(data);
-        if (!response.ok) {
-            return {
-                status: response.status,
-                error: new Error("User not found"),
-            };
-        }
-        return data.userGet;
-        // console.log(data)
-        // let smt = data.userGet;
-    }
-
-    onMount(async() => {
-        if (window !== "undefined") {
-            alert(userid)
-            token = localStorage.getItem("token");
-            user = await getUser(userid);
-            console.log(user, "h");
-        }
-    })
 </script>
 
 <div class="bg-app-bg min-h-screen">
@@ -62,7 +13,7 @@
         <!-- header -->
         <header class="bg-black gap-2 flex items-center text-white text-lg p-3">
             <img src={logo} class="rounded-full border" width="35px" alt="Open Chat">
-            <h2>{user || "Unknown user"}</h2>
+            <h2>{data.userGet.username|| "Unknown user"}</h2>
         </header>
 
         <!-- main chat -->

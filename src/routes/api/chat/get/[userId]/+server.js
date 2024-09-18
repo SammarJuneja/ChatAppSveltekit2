@@ -10,7 +10,6 @@ export async function GET({ params, locals }) {
         }
         
         const { userId } = params;
-        console.log(userId, "id get")
         const userGet = await User.findOne({
             _id: userId
         });

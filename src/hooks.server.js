@@ -4,9 +4,7 @@ import config from "../config";
 import jwt from "jsonwebtoken"
 
 export async function handle({ event, resolve }) {
-    console.log(2)
     await connectDB();
-    console.log(3)
 
     if (event.url.pathname.startsWith("/api/user") || event.url.pathname.startsWith("/api/chat")) {
 
@@ -22,18 +20,11 @@ export async function handle({ event, resolve }) {
             return json({ error: "Authentication token is missing" }, { status: 401 });
         }
 
-        console.log(token)
-
         try {
-            // const decodedToken = jwt.verify(token, config.JWT_REFRESH_SECRET);
             const decodedToken = verifyRefreshToken(token);
-            console.log(decodedToken)
 
             if (decodedToken) {
-                console.log('Decoded Token:', decodedToken);
-                console.log(decodedToken.userId)
                 event.locals.userId = decodedToken.userId;
-                console.log('Setting userId:', event.locals.userId);
             } else {
                 return json({ error: "Invalid or expired token" }, { status: 401 });
             }
