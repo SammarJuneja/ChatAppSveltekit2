@@ -96,7 +96,7 @@ const dummy = {
         {#each chats.chat as participant}
           <a href={`/chat/${participant}`} class="flex w-full gap-2 border-b border-login-button p-2 py-3">
             <div class="flex items-center">
-              <img src={logo} referrerpolicy="no-referrer" class="rounded-full" width="45px" alt="Open Chat">
+              <img src={logo} class="rounded-full" width="45px" alt="Open Chat">
             </div>
             <div class="grid items-center">
               <p class="text-white">{usernames[participant] || "Loading..."}</p>
