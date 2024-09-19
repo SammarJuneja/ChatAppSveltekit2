@@ -8,7 +8,6 @@ export async function POST({ request }) {
         const data = await request.json();
         const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
         const passRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?\d)(?=.*?[#?!@$%^&*-]).{8,}$/;
-        console.log(data.email, data.username, data.password)
   
         if (!data.username || !data.email || !data.password) {
             return json({ "error": "Please fill all the details" }, { "status": 400 });
@@ -17,7 +16,6 @@ export async function POST({ request }) {
         if (!emailRegex.test(data.email) && !passRegex.test(email.password)) {
             return json({ "error": "Your email or password is invalid, your password should contain one number and one special letter" }, { status: 400 });
         }
-        console.log(data.email)
   
         const userEmailCheck = await User.findOne({ "email": data.email });
   
@@ -36,12 +34,20 @@ export async function POST({ request }) {
         const user = await User.create({
             username: data.username,
             email: data.email,
-            password: hashedPassword
+            password: hashedPassword,
         });
         user.save();
   
         const accessToken = signAccessToken({ "userId": user._id });
         const refreshToken = signRefreshToken({ "userId": user._id  });
+
+        await User.updateOne({
+            _id: user._id
+        }, {
+            $set: {
+                verificationToken: refreshToken
+            }
+        });
   
         return json({
             "message": `Your account is successfully created by username ${data.username}`,

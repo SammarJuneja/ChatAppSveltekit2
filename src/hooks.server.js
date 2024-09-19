@@ -8,7 +8,7 @@ export async function handle({ event, resolve }) {
 
     if (event.url.pathname.startsWith("/api/user") || event.url.pathname.startsWith("/api/chat")) {
 
-        const authHeader = event.request.headers.get("Authorization");
+        const authHeader = event.request.headers.get("Authorization").trim();
 
         if (!authHeader) {
             return json({ "error": "Authentication header is missing" }, { status: 401 });

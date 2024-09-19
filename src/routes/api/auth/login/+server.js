@@ -5,7 +5,6 @@ import { compare } from "bcrypt";
 
 export async function POST({ request }) {
     const data = await request.json();
-    console.log(data, "ehe");
 
     if (!data.email && !data.password) {
         return json({ "error": "You didn\'t fill email and password" }, { "status": 400 });
@@ -27,6 +26,14 @@ export async function POST({ request }) {
 
     const accessToken = signAccessToken({ "userId": user._id });
     const refreshToken = signRefreshToken({ "userId": user._id });
+
+    await User.updateOne({
+        _id: user._id
+    }, {
+        $set: {
+            verificationToken: refreshToken
+        }
+    });
     
     return json({
         "status": 200,

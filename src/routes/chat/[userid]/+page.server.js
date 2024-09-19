@@ -1,19 +1,14 @@
+import { getUser, getToken } from '../../../lib/functions.js';
+
 export async function load({ params }) {
     const { userid } = params;
+    const user = await getToken(userid);
+    console.log(user)
+    let token = user.token;
 
-    const apiUrl = "http://localhost:4000/api";
-    let token = "token";
-
-        const response = await fetch(`${apiUrl}/user/get/${userid}`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-            },
-        });
-        const data = await response.json();
-        console.log(data);
-        return data;
+    const data = await getUser(userid, token);
+    console.log(data)
+    return data;
 }
 
 export const ssr = false;
