@@ -26,7 +26,6 @@
       } else {
         const data = await response.json();
         goto("/home");
-        console.log(data)
         localStorage.setItem("token", data.refreshToken);
         return data;
       }

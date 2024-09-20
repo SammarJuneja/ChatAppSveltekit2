@@ -41,7 +41,7 @@ export const verifyRefreshToken = (token) => {
 export const connectDB = async () => {
     try {
         if (mongoose.connection.readyState === 0) {
-            await mongoose.connect(config.MONGO, { useUnifiedTopology: true, serverSelectionTimeoutMS: 5000 });
+            await mongoose.connect(config.MONGO, { serverSelectionTimeoutMS: 5000 });
             console.log("MongoDb is connected");
         }
         return mongoose.connection;
@@ -49,6 +49,3 @@ export const connectDB = async () => {
         console.error(error);
     }
 }
-
-// "dev": "concurrently \"vite dev\" \"npm run start:server\"",
-// "start:server": "nodemon server.js",

@@ -3,10 +3,10 @@ import User from "../../../../../lib/modals/user.js";
 
 export async function GET({ params }) {
     try {
-      const { userId } = params;
+      const { userid } = params;
 
       const userGet = await User.findOne({
-        _id: userId
+        _id: userid
       });
   
       if (!userGet) {

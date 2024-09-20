@@ -6,9 +6,13 @@ import jwt from "jsonwebtoken"
 export async function handle({ event, resolve }) {
     await connectDB();
 
+    if (event.url.pathname.startsWith("/api/dev")) {
+        console.log("hello")
+    }
+
     if (event.url.pathname.startsWith("/api/user") || event.url.pathname.startsWith("/api/chat")) {
 
-        const authHeader = event.request.headers.get("Authorization").trim();
+        const authHeader = event.request.headers.get("Authorization");
 
         if (!authHeader) {
             return json({ "error": "Authentication header is missing" }, { status: 401 });

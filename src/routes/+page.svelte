@@ -5,40 +5,17 @@
     // import { io } from "../lib/sockets/socketClient";
     
     const socket = io("http://localhost:4000");
-    const apiUrl = "http://localhost:4000/api";
     let token;
     let username = `User ${Math.floor(Math.random() * 100)}`;
 
-    async function getUser(id) {
-        const response = await fetch(`${apiUrl}/user/get/${id}`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-            },
-        });
-        return await response.json();
-    }
-// Hello890@
     onMount(async() => {
-        if (typeof window !== "undefined") {
-            try {
-                token = localStorage.getItem("token");
-                if (token !== null && token !== "undefined") {
-                    // const decodedToken = jwtDecode(token);
-                    // const user = await getUser(decodedToken.userId);
-                    // let ok = user.userGet.username;
-                    // console.log(socket.connected)
-                    socket.on("join", () => {
-                        console.log(`${username} just opened the app`);
-                        socket.emit("join", "hello");
-                    });
-                    // console.log(user.userGet.username, user, decodedToken);
-                    // console.log(2)
-                }
-            } catch (error) {
-                console.log(error)
-            }
+        try {
+            socket.on("join", () => {
+                console.log(`${username} just opened the app`);
+                socket.emit("join", "hello");
+            });
+        } catch (error) {
+            console.log(error);
         }
     });
 </script>
