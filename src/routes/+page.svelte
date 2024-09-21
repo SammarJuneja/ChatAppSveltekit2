@@ -11,16 +11,16 @@
 
     onMount(async() => {
         try {
+            socket.on("join", () => {
+                console.log(`${username} just opened the app`);
+                socket.emit("join", "hello");
+            });
             const token = localStorage.getItem("token");
             if (token) {
                 const decodedToken = jwtDecode(token);
                 let decodedUser = await getUser(decodedToken.userId, token);
                 user = decodedUser.userGet.username;
             }
-            socket.on("join", () => {
-                console.log(`${username} just opened the app`);
-                socket.emit("join", "hello");
-            });
         } catch (error) {
             console.log(error);
         }
