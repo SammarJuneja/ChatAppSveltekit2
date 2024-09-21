@@ -2,14 +2,21 @@
     import { onMount } from "svelte";
     import { io } from "socket.io-client";
     import { jwtDecode } from "jwt-decode";
+    import { getUser } from "../lib/functions";
     // import { io } from "../lib/sockets/socketClient";
     
     const socket = io("http://localhost:4000");
-    let token;
+    let user;
     let username = `User ${Math.floor(Math.random() * 100)}`;
 
     onMount(async() => {
         try {
+            const token = localStorage.getItem("token");
+            if (token) {
+                const decodedToken = jwtDecode(token);
+                let decodedUser = await getUser(decodedToken.userId, token);
+                user = decodedUser.userGet.username;
+            }
             socket.on("join", () => {
                 console.log(`${username} just opened the app`);
                 socket.emit("join", "hello");
@@ -30,7 +37,7 @@
             <h3>Login</h3>
         </a>
         <a href="/home" class="bg-blue-900 my-2 py-1 flex items-center justify-center w-40 rounded-2xl">
-            <h3>Bypass Login</h3>
+            <h3>{`Login as ${user || "Bypass"}`}</h3>
         </a>
     </div>
 </div>
