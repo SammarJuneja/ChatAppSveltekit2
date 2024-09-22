@@ -1,7 +1,6 @@
 import { json } from "@sveltejs/kit";
 import mongoose from "mongoose";
-import User from "../../../../../lib/modals/user.js";
-import Chat from "../../../../../lib/modals/chat.js";
+import Chat from "../../../../../lib/modals/chat.js"
 
 export async function GET({ params, locals }) {
     try {
@@ -9,19 +8,19 @@ export async function GET({ params, locals }) {
             return json({ error: "Unauthorized" }, { status: 401 });
         }
         
-        const { userId } = params;
-        const userGet = await User.findOne({
-            _id: userId
+        const { userid } = params;
+        const chat = await Chat.findOne({
+            participants: [userid, locals.userId]
         });
 
-        if (!userId || !mongoose.Types.ObjectId.isValid(userId)) {
-            return json({ error: "Invalid user ID" }, { status: 400 });
-        }
+        // if (!userId || !mongoose.Types.ObjectId.isValid(userId)) {
+        //     return json({ error: "Invalid user ID" }, { status: 400 });
+        // }
 
-        if (!userGet) {
-            return json({ "error": "User has no chats" }, { status: 404 });
+        if (!chat) {
+            return json({ "error": "This chat does not exist" }, { status: 404 });
         } else {
-            return json({ chat: userGet.chats }, { status: 200 });
+            return json({ chat: chat }, { status: 200 });
         }
     } catch (error) {
         console.log(error)

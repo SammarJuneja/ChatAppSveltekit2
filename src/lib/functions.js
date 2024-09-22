@@ -13,6 +13,18 @@ export async function getUser(id, token) {
 }
 
 export async function getUserChats(id, token) {
+    const response = await fetch(`${apiUrl}/chat/get/user/${id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const data = await response.json();
+    return data;
+}
+
+export async function getChat(id, token) {
     const response = await fetch(`${apiUrl}/chat/get/${id}`, {
       method: "GET",
       headers: {
@@ -24,8 +36,14 @@ export async function getUserChats(id, token) {
     return data;
 }
 
-export async function getToken(id) {
-    const response = await fetch(`${apiUrl}/dev/token/${id}`);
+export async function getChatMessage(id, token) {
+    const response = await fetch(`${apiUrl}/chat/message/get/${id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
     const data = await response.json();
     return data;
 }

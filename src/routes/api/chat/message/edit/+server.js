@@ -1,7 +1,7 @@
 import { json } from "@sveltejs/kit";
 import Message from "../../../../../lib/modals/message";
 
-export async function PUT({ request, locals }) {
+export async function POST({ request, locals }) {
     try {
       if (!locals.userId) {
         return json({ error: "Unauthorized" }, { status: 401 });
