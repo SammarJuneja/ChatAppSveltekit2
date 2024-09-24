@@ -1,14 +1,8 @@
 import { json, error } from "@sveltejs/kit";
 import { connectDB, verifyRefreshToken} from "./stores/store";
-import config from "../config";
-import jwt from "jsonwebtoken"
 
 export async function handle({ event, resolve }) {
     await connectDB();
-
-    if (event.url.pathname.startsWith("/api/dev")) {
-        console.log("hello")
-    }
 
     if (event.url.pathname.startsWith("/api/user") || event.url.pathname.startsWith("/api/chat")) {
 

@@ -31,7 +31,6 @@ export const verifyAccessToken = (token) => {
 export const verifyRefreshToken = (token) => {
     try {
         const verified = jwt.verify(token, JWT_REFRESH_TOKEN);
-        console.log(token, verified, JWT_REFRESH_TOKEN)
         return verified;
     } catch (error) {
         console.log(error)

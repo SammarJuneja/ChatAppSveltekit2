@@ -9,6 +9,7 @@
   let token;
   // const logo = "https://cdn.discordapp.com/attachments/860434275832954880/1285657186869051514/OpenChat.png?ex=66eb110f&is=66e9bf8f&hm=c8050788c092b12f915385b629cdd13ee1a9f80cb3d3fa38b07bb6190b02bb36&"
   let usernames = {};
+  let lastMessage = {};
 
   // avbcsywS@34
 
@@ -19,22 +20,21 @@
       if (token !== null) {
         const decodedToken = jwtDecode(token);
         chats = await getUserChats(decodedToken.userId, token);
-        console.log(chats)
         
-        for (const id of chats.chat) {
-            meow = await getChat(id, token);
-            console.log(meow.chat);
+        for (const userId of chats.chat) {
+            meow = await getChat(userId, token);
+            lastMessage[userId] = []
 
-            for (const id of meow.chat) {
-              const lastMessage = await getChatMessage(id, token);
-              console.log(lastMessage);
+            for (const chat of meow.chat) {
+              console.log(chat)
+              const message = await getChatMessage(chat._id, token);
+              lastMessage[userId] = message.lastMessage || "ok";
             }
-            break;
           try {
-            // const user = await getUser(id, token);
-            // usernames[id] = user.userGet.username;
+            const user = await getUser(userId, token);
+            usernames[userId] = user.userGet.username;
           } catch (error) {
-            console.error(`Failed to fetch username for ID ${id}:`, error);
+            console.error(`Failed to fetch username for ID ${userId}:`, error);
           }
         }
       }
@@ -60,6 +60,14 @@
             </div>
             <div class="grid items-center">
               <p class="text-white">{usernames[participant] || "Loading..."}</p>
+              {#if lastMessage[participant]}
+              <p class="text-gray-500 text-sm">{lastMessage[participant]}</p>
+              <!-- {#each lastMessage[participant] as message}
+                <div class="mt-2 text-gray-500 text-sm">
+                  {message.content.replace(/\n/g, '<br>')}
+                </div>
+              {/each} -->
+              {/if}
             </div>
           </a>
         {/each}

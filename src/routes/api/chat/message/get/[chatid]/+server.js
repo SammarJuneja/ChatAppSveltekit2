@@ -1,3 +1,4 @@
+import { json } from "@sveltejs/kit";
 import Chat from "../../../../../../lib/modals/chat.js";
 
 export async function GET({ params, locals }) {

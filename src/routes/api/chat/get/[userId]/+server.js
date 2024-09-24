@@ -9,7 +9,7 @@ export async function GET({ params, locals }) {
         }
         
         const { userid } = params;
-        const chat = await Chat.findOne({
+        const chat = await Chat.find({
             participants: [userid, locals.userId]
         });
 
