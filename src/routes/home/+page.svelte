@@ -26,9 +26,8 @@
             lastMessage[userId] = []
 
             for (const chat of meow.chat) {
-              console.log(chat)
               const message = await getChatMessage(chat._id, token);
-              lastMessage[userId] = message.lastMessage || "ok";
+              lastMessage[userId] = message.lastMessage;
             }
           try {
             const user = await getUser(userId, token);

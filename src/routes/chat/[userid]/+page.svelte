@@ -13,7 +13,7 @@
         <!-- header -->
         <header class="bg-black gap-2 flex items-center text-white text-lg p-3">
             <img src={logo} class="rounded-full border" width="35px" alt="Open Chat">
-            <h2>{data.userGet.username|| "Unknown user"}</h2>
+            <h2>{data.userGet.username || "Unknown user"}</h2>
         </header>
 
         <!-- main chat -->
