@@ -1,14 +1,27 @@
-import { getChatMessage, getUser } from '../../../lib/functions.js';
-import { verifyRefreshToken } from '../../../stores/store.js';
+import { getChat, getChatMessage, getUser } from '../../../lib/functions.js';
 
 export async function load({ params }) {
     const { userid } = params;
-    let token = localStorage.getItem("token");
+    const token = localStorage.getItem("token");
+    console.log(token);
 
-    const data = await getUser(userid, token);
-    // // const decodedToken = verifyRefreshToken(token);
-    // const lastMessage = await getChatMessage(chatid, token);
-    return data;
+    try {
+        const user = await getUser(userid, token);
+        const chatId = await getChat(userid, token);
+        console.log(chatId.chat[1]._id)
+        
+        const data = {
+            user: user,
+            token: token,
+            chatId: chatId
+        };
+
+        console.log(data, token, chatId);
+        return data;
+    } catch (error) {
+        console.log(error);
+        return null;
+    }
 }
 
 export const ssr = false;

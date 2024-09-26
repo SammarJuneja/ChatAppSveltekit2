@@ -1,11 +1,25 @@
 <script>
+    import { onMount } from "svelte";
+    import { sendMessage, getUser } from "../../../lib/functions";
     import Icon from "../../../ui/Icon.svelte";
     const logo = "https://media.discordapp.net/attachments/916361716965707836/1277165337825251338/OpenChat.png?ex=66cc2c69&is=66cadae9&hm=7e62f9d41dbfb54c7857ee8826c900759630569fb5953adca4762a9480b90712&";
 
     export let data;
+    // export let token;
+    // export let chatId;
+    let user;
     let message = "";
     let firstUser  = "";
     let secondUser = "";
+
+    onMount(async() => {
+        if (data && data.user) {
+            user = data.user;
+        } else {
+            console.warn('User data is not available');
+        }
+        console.log(data);
+    });
 </script>
 
 <div class="bg-app-bg min-h-screen">
@@ -13,7 +27,7 @@
         <!-- header -->
         <header class="bg-black gap-2 flex items-center text-white text-lg p-3">
             <img src={logo} class="rounded-full border" width="35px" alt="Open Chat">
-            <h2>{data.userGet.username || "Unknown user"}</h2>
+            <h2>{data.user.userGet.username || "Unknown user"}</h2>
         </header>
 
         <!-- main chat -->
@@ -35,7 +49,15 @@
                 <button class="p-1.5 bg-signup-button rounded-full">
                     <Icon icon="attachment" size="20px" color="white"/>
                 </button>
-                <button class="p-1.5 mr-5 bg-signup-button rounded-full">
+                <button on:click={async() => {
+                    try {
+                        await sendMessage(data.chatId.chat[1]._id, message, data.token);
+                        message = "";
+                        console.log("sucess")
+                    } catch (error) {
+                        console.log(error);
+                    }
+                }} class="p-1.5 mr-5 bg-signup-button rounded-full">
                     <Icon icon="send" size="20px" color="white"/>
                 </button>
             </div>
