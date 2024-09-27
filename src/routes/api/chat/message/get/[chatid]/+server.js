@@ -1,5 +1,5 @@
 import { json } from "@sveltejs/kit";
-import Chat from "../../../../../../lib/modals/chat.js";
+import Message from "../../../../../../lib/modals/message.js";
 
 export async function GET({ params, locals }) {
     try {
@@ -9,16 +9,15 @@ export async function GET({ params, locals }) {
 
         const { chatid } = params;
 
-        const chat = await Chat.findOne({
-            _id: chatid
-        });
+        const chatMessages = await Message.find({ chatId: chatid }).populate("sender", "username");
 
-        if (!chat) {
+        if (!chatMessages) {
             return json({ error: "Chat not found" }, { status: 404 });
         } else {
-            return json({ chat: chat }, { status: 200 });
+            return json({ messages: chatMessages }, { status: 200 });
         }
     } catch (error) {
-
+        console.log(error);
+        return json({ error: error }, { status: 500 });
     }
 }

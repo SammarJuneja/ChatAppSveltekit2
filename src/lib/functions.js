@@ -36,8 +36,8 @@ export async function getChat(userId, token) {
     return data;
 }
 
-export async function getChatMessage(id, token) {
-    const response = await fetch(`${apiUrl}/chat/message/get/${id}`, {
+export async function getChatMessage(chatId, token) {
+    const response = await fetch(`${apiUrl}/chat/message/get/${chatId}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

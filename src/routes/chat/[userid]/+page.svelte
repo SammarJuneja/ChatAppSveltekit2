@@ -18,7 +18,7 @@
         } else {
             console.warn('User data is not available');
         }
-        console.log(data);
+        console.log(data, data.messages.messages.length, data.messages.messages[0].message);
     });
 </script>
 
@@ -31,14 +31,39 @@
         </header>
 
         <!-- main chat -->
-        <div class="grid justify-start">
+        <!-- <div class="grid justify-start">
             <div class="w-auto max-w-40 px-2 m-5 bg-signup-button text-white p-1 rounded-lg break-all">
                 <h2>Hello</h2>
+                 {#if data.messages.messages.length > 0}
+                 {#if data.messages.messages.sender === data.user.userGet}
+                 {#each data.messages.messages as chat, index}
+                    <button on:click={() => {
+                        console.log(chat[index].message, "h")
+                    }}>{chat[index].message}</button>
+                {/each}
+                {/if}
+                {/if}
             </div>
         </div>
         <div class="grid justify-end">
             <div class="w-auto max-w-40 px-2 mx-5 bg-login-button text-white p-1 rounded-lg break-all">
                 <h2>Hey</h2>
+            </div>
+        </div> -->
+
+        <div class="grid justify-start">
+            <div class="w-auto max-w-40 px-2 m-5 bg-signup-button text-white p-1 rounded-lg break-all">
+                {#if data.messages && data.messages.messages.length > 0}
+                    {#each data.messages.messages as chat, index}
+                        <div class="my-2">
+                            <span class={chat.sender._id === data.user.userGet._id ? "text-left" : "text-left"}>
+                                <button>{chat.message}</button>
+                            </span>
+                        </div>
+                    {/each}
+                {:else}
+                    <p>No messages to display.</p>
+                {/if}
             </div>
         </div>
         
