@@ -18,7 +18,7 @@
         } else {
             console.warn('User data is not available');
         }
-        console.log(data, data.messages.messages.length, data.messages.messages[0].message);
+        console.log(data, user, data.messages.messages.length, data.messages.messages[0].message, data.messages.messages[0].sender._id === data.author.userGet._id, data.messages.messages[0].sender, data.user.userGet._id);
     });
 </script>
 
@@ -27,7 +27,7 @@
         <!-- header -->
         <header class="bg-black gap-2 flex items-center text-white text-lg p-3">
             <img src={logo} class="rounded-full border" width="35px" alt="Open Chat">
-            <h2>{data.user.userGet.username || "Unknown user"}</h2>
+            <h2>{user.userGet.username || "Unknown user"}</h2>
         </header>
 
         <!-- main chat -->
@@ -51,20 +51,20 @@
             </div>
         </div> -->
 
-        <div class="grid justify-start">
-            <div class="w-auto max-w-40 px-2 m-5 bg-signup-button text-white p-1 rounded-lg break-all">
+        <div class="grid">
                 {#if data.messages && data.messages.messages.length > 0}
-                    {#each data.messages.messages as chat, index}
-                        <div class="my-2">
-                            <span class={chat.sender._id === data.user.userGet._id ? "text-left" : "text-left"}>
-                                <button>{chat.message}</button>
-                            </span>
+                    {#each data.messages.messages as chat}
+                    <span class={chat.sender._id === data.author.userGet._id ? "text-right w-full break-all pr-5" : "text-left w-full break-all border pl-5"}>
+                        <div class="my-2 w-full">
+                           <button class="bg-signup-button p-2 rounded-lg break-all text-white w-1/2">{chat.message}shhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh</button>
                         </div>
+                    </span>
                     {/each}
                 {:else}
                     <p>No messages to display.</p>
                 {/if}
-            </div>
+                <!-- class="w-auto max-w-40 px-2 m-5 text-white p-1 rounded-lg break-all" -->
+                <!-- class={chat.sender._id === data.author.userGet._id ? "text-right" : "text-left"} -->
         </div>
         
         <!--  bottom bar -->

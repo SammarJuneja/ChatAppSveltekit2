@@ -1,24 +1,26 @@
+import { jwtDecode } from 'jwt-decode';
 import { getChat, getChatMessage, getUser } from '../../../lib/functions.js';
 
 export async function load({ params }) {
     const { userid } = params;
     const token = localStorage.getItem("token");
-    console.log(token);
-
+    
     try {
+        const decodedToken = jwtDecode(token);
         const user = await getUser(userid, token);
+        const author = await getUser(decodedToken.userId, token)
         const chatId = await getChat(userid, token);
-        const messages = await getChatMessage(chatId.chat[1]._id, token);
-        console.log(chatId.chat[1]._id, messages.messages);
+        console.log(chatId)
+        const messages = await getChatMessage(chatId.chat[0]._id, token);
          
         const data = {
             user: user,
+            author: author,
             token: token,
             chatId: chatId,
             messages: messages
         };
 
-        console.log(data, token, chatId);
         return data;
     } catch (error) {
         console.log(error);
