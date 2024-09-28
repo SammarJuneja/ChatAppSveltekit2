@@ -10,7 +10,7 @@ export async function load({ params }) {
         const user = await getUser(userid, token);
         const author = await getUser(decodedToken.userId, token)
         const chatId = await getChat(userid, token);
-        console.log(chatId)
+        console.log(chatId, user, author)
         const messages = await getChatMessage(chatId.chat[0]._id, token);
          
         const data = {

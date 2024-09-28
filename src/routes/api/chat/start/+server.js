@@ -10,9 +10,15 @@ export async function POST({ request, locals }) {
 
       const { user } = await request.json();
       console.log(user,"h")
-      const users = [user, locals.userId]
+      const users = [user, locals.userId];
+      console.log(users)
+
+      if (user === locals.userId) {
+        return json({ error: "You can't start a chat with yourself" }, { status: 400 });
+      }
+
       const chatGet = await Chat.find({
-        _id: {
+        participants: {
           $in: users
         }
       });
