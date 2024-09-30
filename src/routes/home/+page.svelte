@@ -3,10 +3,12 @@
   import Header from "../../lib/components/+Header.svelte";
   import { jwtDecode } from "jwt-decode";
   import { getChat, getChatMessage, getUser, getUserChats } from "../../lib/functions.js";
+  import NavBar from "../../lib/components/+NavBar.svelte";
 
   let chats = { "chat": [] } ;
   let meow = { "chat": [] };
   let token;
+  let user;
   // const logo = "https://cdn.discordapp.com/attachments/860434275832954880/1285657186869051514/OpenChat.png?ex=66eb110f&is=66e9bf8f&hm=c8050788c092b12f915385b629cdd13ee1a9f80cb3d3fa38b07bb6190b02bb36&"
   let usernames = {};
   let lastMessage = {};
@@ -19,6 +21,7 @@
       token = localStorage.getItem("token");
       if (token !== null) {
         const decodedToken = jwtDecode(token);
+        user = decodedToken.userId;
         chats = await getUserChats(decodedToken.userId, token);
         
         for (const userId of chats.chat) {
@@ -76,5 +79,8 @@
         </div>
       {/if}
       <!-- {/if} -->
+    </div>
+    <div class="h-96 grid items-end">
+      <NavBar userId={user} />
     </div>
   </div>
