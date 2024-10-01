@@ -51,6 +51,10 @@ const userSchema = new Schema({
     type: String,
     default: "Just joined"
   },
+  status: {
+    type: String,
+    default: ""
+  },
   isVerified: {
     type: Boolean,
     default: false

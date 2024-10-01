@@ -7,7 +7,7 @@ export async function POST({ request, locals }) {
       return json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { newUsername, newEmail } = request;
+    const { newUsername, newEmail } = await request.json();
 
     const dbUser = await User.findOne({ _id: locals.userId });
 

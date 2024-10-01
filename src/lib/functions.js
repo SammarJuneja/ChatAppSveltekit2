@@ -63,3 +63,52 @@ export async function sendMessage(chatId, message, token) {
   const data = await response.json();
   return data;
 }
+
+export async function updateUserAvatar(avatar, token) {
+  const response = await fetch(`${apiUrl}/user/update/avatar`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({
+      avatar: avatar
+    }),
+  });
+  const data = await response.json();
+  return data;
+}
+
+export async function updateUserBio(bio, token) {
+  const response = await fetch(`${apiUrl}/user/update/bio`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({
+      bio: bio
+    }),
+  });
+  const data = await response.json();
+  return data;
+}
+
+export async function updateUserStatus(status, token) {
+  try {
+  const response = await fetch(`${apiUrl}/user/update/status`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({
+      status: status
+    }),
+  });
+  const data = await response.json();
+  return data;
+} catch (error) {
+  console.log(error)
+}
+}

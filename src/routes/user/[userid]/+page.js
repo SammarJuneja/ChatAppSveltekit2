@@ -13,7 +13,8 @@ export async function load({ params }) {
             
         const data = {
             author: author ? true : false,
-            user: user
+            user: user,
+            token: token
         };
         
         return data;
