@@ -4,10 +4,10 @@ function socketConnection(server) {
     const io = new Server(server);
 
     io.on("connection", (socket) => {
-        let username = "test";
+        let username = `User ${Math.floor(Math.random() * 100)}`;
         socket.emit("join", username);
 
-        socket.on("message", (message) => {
+        socket.on("message", (message, username) => {
             io.emit("message", {
                 from: username,
                 message: message,

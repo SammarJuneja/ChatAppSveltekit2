@@ -2,6 +2,7 @@
     import { onMount } from "svelte";
     import { sendMessage, getUser } from "../../../lib/functions";
     import Icon from "../../../ui/Icon.svelte";
+    import { io } from "../../../lib/sockets/socketClient.js";
     const logo = "https://media.discordapp.net/attachments/916361716965707836/1277165337825251338/OpenChat.png?ex=66cc2c69&is=66cadae9&hm=7e62f9d41dbfb54c7857ee8826c900759630569fb5953adca4762a9480b90712&";
 
     export let data;
@@ -11,10 +12,27 @@
     let message = "";
     let firstUser  = "";
     let secondUser = "";
+    let messages = [];
+
+    function send() {
+        const msg = message;
+        let k = io.emit("message", message);
+        console.log(k)
+    }
 
     onMount(async() => {
+        io.on("message", (message, username) => {
+            messages = [...messages, message];
+            let ok = 'ok'
+            ok = username;
+            console.log(messages)
+        })
         if (data && data.user && data.author && data.messages && data.chatId) {
             user = data.user;
+            let ok = user.userGet.username;
+            io.on("join", () => {
+                console.log(`${ok} opened the app`);
+            })
         } else {
             console.warn('User data is not available');
         }
@@ -33,23 +51,32 @@
         <!-- main chat -->
 
         
-                {#if data.messages && data.messages.messages.length > 0}
+                <!-- {#if data.messages && data.messages.messages.length > 0}
                     {#each data.messages.messages as chat}
-                    <div  class={chat.sender._id === data.author.userGet._id ? "grid w-full justify-end text-right border break-all pr-5" : "grid w-full justify-start text-left break-all border pl-5"}>
+                    <div  class={chat.sender._id === data.author.userGet._id ? "grid w-full justify-end text-right break-all pr-5" : "grid w-full justify-start text-left break-all pl-5"}>
                         <span>
-                            <div class="my-2 border">
-                                <button class="bg-signup-button p-2 w-full max-w-52 rounded-lg break-all text-white">{chat.message}</button>
+                            <div class="my-2 ounded-md">
+                                <button class="bg-signup-button px-2 py-1 w-full max-w-52 rounded-lg break-all text-white">{chat.message}</button>
                             </div>
                         </span>
                     </div>
                     {/each}
                 {:else}
                     <p class="text-center text-white m-10">No messages to display.</p>
-                {/if}
+                {/if} -->
                 <!-- class="w-auto max-w-40 px-2 m-5 text-white p-1 rounded-lg break-all" -->
                 <!-- class={chat.sender._id === data.author.userGet._id ? "text-right" : "text-left"} -->
         
-        
+                <!-- {#if data.messages && data.messages.messages.length > 0} -->
+                {#each messages as chat}
+                <!-- <div  class={chat.sender._id === data.author.userGet._id ? "grid w-full justify-end text-right break-all pr-5" : "grid w-full justify-start text-left break-all pl-5"}> -->
+                    <!-- <span> -->
+                        <!-- <div class="my-2 ounded-md"> -->
+                            <button class="bg-signup-button px-2 py-1 w-full max-w-52 rounded-lg break-all text-white">{chat}</button>
+                        <!-- </div> -->
+                    <!-- </span> -->
+                {/each}
+
         <!--  bottom bar -->
         <nav class="fixed bottom-0 border-t w-full">
             <div class="flex gap-2 m-3 w-full">
@@ -58,13 +85,14 @@
                     <Icon icon="attachment" size="20px" color="white"/>
                 </button>
                 <button on:click={async() => {
-                    try {
-                        await sendMessage(data.chatId.chat[1]._id, message, data.token);
-                        message = "";
-                        console.log("sucess")
-                    } catch (error) {
-                        console.log(error);
-                    }
+                    send()
+                    // try {
+                    //     await sendMessage(data.chatId.chat[0]._id, message, data.token);
+                    //     message = "";
+                    //     console.log("sucess")
+                    // } catch (error) {
+                    //     console.log(error);
+                    // }
                 }} class="p-1.5 mr-5 bg-signup-button rounded-full">
                     <Icon icon="send" size="20px" color="white"/>
                 </button>
