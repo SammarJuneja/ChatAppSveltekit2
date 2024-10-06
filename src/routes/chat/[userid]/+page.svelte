@@ -14,19 +14,27 @@
     let secondUser = "";
     let messages = [];
 
-    function send() {
-        const msg = message;
-        let k = io.emit("message", message);
+    function send(content) {
+        const msg = {
+            sender: data.author.userGet._id,
+            content: content
+        };
+        let k = io.emit("message", { roomId: data.chatId, msg });
         console.log(k)
     }
 
     onMount(async() => {
-        io.on("message", (message, username) => {
+        io.emit("joinChat", data.chatId);
+        io.on("fetchMessage", (msg) => {
+            messages = msg;
+        });
+        let jj = data.user.userGet._id;
+        io.on("message", (message) => {
             messages = [...messages, message];
-            let ok = 'ok'
-            ok = username;
-            console.log(messages)
-        })
+            // let auth = jj;
+            // auth = user;
+            console.log(messages);
+        });
         if (data && data.user && data.author && data.messages && data.chatId) {
             user = data.user;
             let ok = user.userGet.username;
@@ -69,12 +77,13 @@
         
                 <!-- {#if data.messages && data.messages.messages.length > 0} -->
                 {#each messages as chat}
-                <!-- <div  class={chat.sender._id === data.author.userGet._id ? "grid w-full justify-end text-right break-all pr-5" : "grid w-full justify-start text-left break-all pl-5"}> -->
-                    <!-- <span> -->
-                        <!-- <div class="my-2 ounded-md"> -->
-                            <button class="bg-signup-button px-2 py-1 w-full max-w-52 rounded-lg break-all text-white">{chat}</button>
-                        <!-- </div> -->
-                    <!-- </span> -->
+                <div class={chat.sender === data.author.userGet._id ? "grid w-full justify-end text-right break-all pr-5" : "grid w-full justify-start text-left break-all pl-5"}>
+                    <span>
+                        <div class="my-2 ounded-md">
+                            <button class="bg-signup-button px-2 py-1 w-full max-w-52 rounded-lg break-all text-white">{chat.content}</button>
+                        </div>
+                    </span>
+                </div>
                 {/each}
 
         <!--  bottom bar -->
