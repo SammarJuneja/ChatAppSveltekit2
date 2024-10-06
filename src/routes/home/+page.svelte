@@ -2,7 +2,7 @@
   import { onMount } from "svelte";
   import Header from "../../lib/components/+Header.svelte";
   import { jwtDecode } from "jwt-decode";
-  import { getChat, getChatMessage, getUser, getUserChats } from "../../lib/functions.js";
+  import { getChat, getUser, getUserChats } from "../../lib/functions.js";
   import NavBar from "../../lib/components/+NavBar.svelte";
 
   let chats = { "chat": [] } ;
@@ -28,10 +28,10 @@
             meow = await getChat(userId, token);
             lastMessage[userId] = []
 
-            for (const chat of meow.chat) {
-              const message = await getChatMessage(chat._id, token);
-              lastMessage[userId] = message.lastMessage;
-            }
+            // for (const chat of meow.chat) {
+            //   const message = await getChatMessage(chat._id, token);
+            //   lastMessage[userId] = message.lastMessage;
+            // }
           try {
             const user = await getUser(userId, token);
             usernames[userId] = user.userGet.username;

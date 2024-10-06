@@ -23,8 +23,8 @@ export async function POST({ request, locals }) {
         }
       });
 
-      if (chatGet.length === 2) {
-        return json({ chatGet }, { status: 200 });
+      if (chatGet) {
+        return json({ message: "Chat already exists" }, { status: 500 });
       } else {
         const newChat = new Chat({
           participants: users

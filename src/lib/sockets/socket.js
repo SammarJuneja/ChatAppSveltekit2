@@ -8,50 +8,34 @@ function socketConnection(server) {
         let username = `User ${Math.floor(Math.random() * 100)}`;
         socket.emit("join", username);
 
-        socket.on("joinChat", async (roomId) => {
-            socket.join(roomId);
-            const messages = await Message.find({ chatId: roomId }).sort({ timestamp: 1 }).limit(50);
+        socket.on("joinChat", async (data) => {
+            const { chatId, username } = data;
+            socket.join(chatId);
+            const messages = await Message.find({ chatId: chatId }).sort({ timestamp: 1 }).limit(50);
+            console.log(messages)
             socket.emit("fetchMessage", messages);
-            console.log(`${user} joined room: ${roomId}`);
+            console.log(`${username} joined room: ${chatId}`);
         });
 
-        socket.on("message", async ({ message, roomId }) => {
+        socket.on("message", async (data) => {
             try {
-                const newMesssage = new Message({
-                    sender: message.sender,
-                    content: message.content
+                const { chatId, sender, message, attachment, reaction } = data;
+
+                const newMessage = new Message({
+                    chatId: chatId,
+                    sender: sender,
+                    message: message,
+                    attachment: attachment || [],
+                    reaction: reaction || [],
                 });
-                await newMesssage.save();
-
-                io.to(roomId).emit("message", {
-                    sender: message.sender,
-                    content: message.content
-                });
-            } catch (error) {
-                console.log(error);
-            }
-        });
-
-        // socket.on("fetchmessage", async () => {
-        //     try {
-               
-        //     } catch (error) {
-
-        //     }
-        // });
-
-        // socket.on("message", (message) => {
-        //     io.emit("message", {
-        //         from: id,
-        //         message: message,
-        //     });
-        // });
-
-        // socket.on("chat", (chat) => {
-        //     io.emit("chat", {
                 
-        //     });
-        // });
+                await newMessage.save();
+                socket.to(chatId).emit("newMessage", newMessage);
+            } catch (error) {
+                console.error("Error saving message:", error);
+                socket.emit("error", { message: "Could not send message." });
+            }
+            });
     });
 }
 

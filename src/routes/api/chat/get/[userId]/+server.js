@@ -13,10 +13,6 @@ export async function GET({ params, locals }) {
             participants: [userid, locals.userId]
         });
 
-        // if (!userId || !mongoose.Types.ObjectId.isValid(userId)) {
-        //     return json({ error: "Invalid user ID" }, { status: 400 });
-        // }
-
         if (!chat) {
             return json({ "error": "This chat does not exist" }, { status: 404 });
         } else {

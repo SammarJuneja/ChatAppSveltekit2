@@ -1,50 +1,36 @@
 <script>
     import { onMount } from "svelte";
-    import { sendMessage, getUser } from "../../../lib/functions";
     import Icon from "../../../ui/Icon.svelte";
     import { io } from "../../../lib/sockets/socketClient.js";
-    const logo = "https://media.discordapp.net/attachments/916361716965707836/1277165337825251338/OpenChat.png?ex=66cc2c69&is=66cadae9&hm=7e62f9d41dbfb54c7857ee8826c900759630569fb5953adca4762a9480b90712&";
+    import OpenChat from "../../../ui/OpenChat.png"
 
     export let data;
-    // export let token;
-    // export let chatId;
-    let user;
     let message = "";
-    let firstUser  = "";
-    let secondUser = "";
     let messages = [];
 
-    function send(content) {
-        const msg = {
+    // Password: avbcsywS@34
+    // Email: mi2@gmail.com
+
+    function send() {
+        if (!message.trim()) return;
+        const newMessage = {
+            chatId: data.chatId.chat[0]._id,
+            message: message.trim(),
             sender: data.author.userGet._id,
-            content: content
         };
-        let k = io.emit("message", { roomId: data.chatId, msg });
-        console.log(k)
+        console.log(newMessage)
+        io.emit("message", newMessage);
+        messages = [...messages, newMessage];
+        message = "";
     }
 
     onMount(async() => {
-        io.emit("joinChat", data.chatId);
+        console.log(data.chatId.chat)
+        io.emit("joinChat", { chatId: data.chatId.chat[0]._id, username: data.author.userGet.username });
         io.on("fetchMessage", (msg) => {
             messages = msg;
+            console.log(messages)
         });
-        let jj = data.user.userGet._id;
-        io.on("message", (message) => {
-            messages = [...messages, message];
-            // let auth = jj;
-            // auth = user;
-            console.log(messages);
-        });
-        if (data && data.user && data.author && data.messages && data.chatId) {
-            user = data.user;
-            let ok = user.userGet.username;
-            io.on("join", () => {
-                console.log(`${ok} opened the app`);
-            })
-        } else {
-            console.warn('User data is not available');
-        }
-        // console.log(data, user, data.messages.messages.length, data.messages.messages[0].message, data.messages.messages[0].sender._id === data.author.userGet._id, data.messages.messages[0].sender, data.user.userGet._id);
     });
 </script>
 
@@ -52,7 +38,7 @@
     <div>
         <!-- header -->
         <header class="bg-black gap-2 flex items-center text-white text-lg p-3">
-            <img src={logo} class="rounded-full border" width="35px" alt="Open Chat">
+            <img src={OpenChat} class="rounded-full border" width="35px" alt="Open Chat">
             <h2>{data.user.userGet.username || "Unknown user"}</h2>
         </header>
 
@@ -76,33 +62,26 @@
                 <!-- class={chat.sender._id === data.author.userGet._id ? "text-right" : "text-left"} -->
         
                 <!-- {#if data.messages && data.messages.messages.length > 0} -->
+                <main class="flex-1 overflow-y-auto">
                 {#each messages as chat}
                 <div class={chat.sender === data.author.userGet._id ? "grid w-full justify-end text-right break-all pr-5" : "grid w-full justify-start text-left break-all pl-5"}>
                     <span>
                         <div class="my-2 ounded-md">
-                            <button class="bg-signup-button px-2 py-1 w-full max-w-52 rounded-lg break-all text-white">{chat.content}</button>
+                            <button class="bg-signup-button px-2 py-1 w-full max-w-52 rounded-lg break-all text-white">{chat.message}</button>
                         </div>
                     </span>
                 </div>
                 {/each}
+                </main>
 
         <!--  bottom bar -->
-        <nav class="fixed bottom-0 border-t w-full">
+        <nav class="bottom-0 fixed border-t w-full bg-app-bg">
             <div class="flex gap-2 m-3 w-full">
                 <input bind:value={message} class="rounded-full w-full text-white pl-3 outline-none bg-login-button" type="text" placeholder="Type your message here...">
                 <button class="p-1.5 bg-signup-button rounded-full">
                     <Icon icon="attachment" size="20px" color="white"/>
                 </button>
-                <button on:click={async() => {
-                    send()
-                    // try {
-                    //     await sendMessage(data.chatId.chat[0]._id, message, data.token);
-                    //     message = "";
-                    //     console.log("sucess")
-                    // } catch (error) {
-                    //     console.log(error);
-                    // }
-                }} class="p-1.5 mr-5 bg-signup-button rounded-full">
+                <button on:click={send} class="p-1.5 mr-5 bg-signup-button rounded-full">
                     <Icon icon="send" size="20px" color="white"/>
                 </button>
             </div>
@@ -114,14 +93,14 @@
                     <Icon icon="notification" size="20px" color="white"/>
                 </button>
                 <div class="bg-login-button flex gap-2 overflow-x-auto p-1 w-full rounded-t-md">
-                    <img src={logo} class="rounded-full border" width="35px" alt="Open Chat">
-                    <img src={logo} class="rounded-full border" width="35px" alt="Open Chat">
-                    <img src={logo} class="rounded-full border" width="35px" alt="Open Chat">
-                    <img src={logo} class="rounded-full border" width="35px" alt="Open Chat">
-                    <img src={logo} class="rounded-full border" width="35px" alt="Open Chat">
-                    <img src={logo} class="rounded-full border" width="35px" alt="Open Chat">
-                    <img src={logo} class="rounded-full border" width="35px" alt="Open Chat">
-                    <img src={logo} class="rounded-full border" width="35px" alt="Open Chat">
+                    <img src={OpenChat} class="rounded-full border" width="35px" alt="Open Chat">
+                    <img src={OpenChat} class="rounded-full border" width="35px" alt="Open Chat">
+                    <img src={OpenChat} class="rounded-full border" width="35px" alt="Open Chat">
+                    <img src={OpenChat} class="rounded-full border" width="35px" alt="Open Chat">
+                    <img src={OpenChat} class="rounded-full border" width="35px" alt="Open Chat">
+                    <img src={OpenChat} class="rounded-full border" width="35px" alt="Open Chat">
+                    <img src={OpenChat} class="rounded-full border" width="35px" alt="Open Chat">
+                    <img src={OpenChat} class="rounded-full border" width="35px" alt="Open Chat">
                 </div>
                 <button class="p-1 bg-signup-button rounded-full">
                     <Icon icon="setting" size="20px" color="white"/>
