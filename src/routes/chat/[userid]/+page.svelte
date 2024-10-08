@@ -1,5 +1,5 @@
 <script>
-    import { onMount } from "svelte";
+    import { onDestroy, onMount } from "svelte";
     import Icon from "../../../ui/Icon.svelte";
     import { io } from "../../../lib/sockets/socketClient.js";
     import OpenChat from "../../../ui/OpenChat.png"
@@ -18,7 +18,6 @@
             message: message.trim(),
             sender: data.author.userGet._id,
         };
-        console.log(newMessage)
         io.emit("message", newMessage);
         messages = [...messages, newMessage];
         message = "";
@@ -29,8 +28,16 @@
         io.emit("joinChat", { chatId: data.chatId.chat[0]._id, username: data.author.userGet.username });
         io.on("fetchMessage", (msg) => {
             messages = msg;
-            console.log(messages)
+            console.log(messages);
         });
+        io.on("newMessage", (msg) => {
+            messages = [...messages, msg];
+        });
+    });
+
+    onDestroy(() => {
+        io.off("fetchMessage");
+        io.off("newMessage");
     });
 </script>
 

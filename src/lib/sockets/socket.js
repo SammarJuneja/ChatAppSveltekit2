@@ -12,7 +12,6 @@ function socketConnection(server) {
             const { chatId, username } = data;
             socket.join(chatId);
             const messages = await Message.find({ chatId: chatId }).sort({ timestamp: 1 }).limit(50);
-            console.log(messages)
             socket.emit("fetchMessage", messages);
             console.log(`${username} joined room: ${chatId}`);
         });

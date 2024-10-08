@@ -24,6 +24,7 @@
       if (!response.ok) {
         const errorData = await response.json();
         errorMessage = "There was an error while logging in";
+        console.log(errorData)
         throw new Error(errorData.message || "There was an error while logging in");
       } else {
         const data = await response.json();

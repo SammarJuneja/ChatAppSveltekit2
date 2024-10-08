@@ -1,57 +1,51 @@
 import { json } from '@sveltejs/kit';
 import User from "../../../../lib/modals/user.js";
 import Chat from "../../../../lib/modals/chat.js";
+import mongoose from "mongoose";
 
 export async function POST({ request, locals }) {
     try {
-      if (!locals.userId) {
-        return json({ error: "Unauthorized" }, { status: 401 });
-      }
-
-      const { user } = await request.json();
-      console.log(user,"h")
-      const users = [user, locals.userId];
-      console.log(users)
-
-      if (user === locals.userId) {
-        return json({ error: "You can't start a chat with yourself" }, { status: 400 });
-      }
-
-      const chatGet = await Chat.find({
-        participants: {
-          $in: users
+        if (!locals.userId) {
+            return json({ error: "Unauthorized" }, { status: 401 });
         }
-      });
 
-      if (chatGet) {
-        return json({ message: "Chat already exists" }, { status: 500 });
-      } else {
-        const newChat = new Chat({
-          participants: users
-        });
-        await newChat.save();
+        const { user } = await request.json();
 
-        await User.updateOne({
-          _id: user
-        }, {
-          $push: {
-            chats: locals.userId
-          }
+        const participants = [new mongoose.Types.ObjectId(user), new mongoose.Types.ObjectId(locals.userId)];
+        console.log(participants)
+
+        if (user === locals.userId) {
+            return json({ error: "You can't start a chat with yourself" }, { status: 400 });
+        }
+
+        const chatGet = await Chat.find({
+            participants: {
+                $all: participants
+            }
         });
-        
-        await User.updateOne({
-          _id: locals.userId
-        }, {
-          $push: {
-            chats: user
-          }
-        });
-        
-        console.log(locals.userId, user)
-        return json({ newChat }, { status: 200 });
-      }
+
+        if (chatGet.length > 0) {
+            return json({ message: "Chat already exists" }, { status: 400 });
+        } else {
+            const newChat = new Chat({
+                participants: participants
+            });
+            await newChat.save();
+
+            await User.updateOne(
+                { _id: user },
+                { $addToSet: { chats: locals.userId } }
+            );
+
+            await User.updateOne(
+                { _id: locals.userId },
+                { $addToSet: { chats: user } }
+            );
+
+            return json({ newChat }, { status: 200 });
+        }
     } catch (error) {
-      console.log(error)
-      return json({ "error": "Internal server error" }, { status: 500 });
+        console.error("Error creating chat:", error);
+        return json({ error: "Internal server error" }, { status: 500 });
     }
 }
