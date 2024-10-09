@@ -4,17 +4,14 @@
   import { jwtDecode } from "jwt-decode";
   import { getChat, getUser, getUserChats } from "../../lib/functions.js";
   import NavBar from "../../lib/components/+NavBar.svelte";
+  import OpenChat from "../../ui/OpenChat.png"
 
   let chats = { "chat": [] } ;
   let meow = { "chat": [] };
   let token;
   let user;
-  // const logo = "https://cdn.discordapp.com/attachments/860434275832954880/1285657186869051514/OpenChat.png?ex=66eb110f&is=66e9bf8f&hm=c8050788c092b12f915385b629cdd13ee1a9f80cb3d3fa38b07bb6190b02bb36&"
   let usernames = {};
   let lastMessage = {};
-
-  // avbcsywS@34
-
 
   onMount(async() => {
     try {
@@ -22,16 +19,12 @@
       if (token !== null) {
         const decodedToken = jwtDecode(token);
         user = decodedToken.userId;
+        console.log(user)
         chats = await getUserChats(decodedToken.userId, token);
         
         for (const userId of chats.chat) {
             meow = await getChat(userId, token);
-            lastMessage[userId] = []
-
-            // for (const chat of meow.chat) {
-            //   const message = await getChatMessage(chat._id, token);
-            //   lastMessage[userId] = message.lastMessage;
-            // }
+            lastMessage[userId] = [];
           try {
             const user = await getUser(userId, token);
             usernames[userId] = user.userGet.username;
@@ -58,17 +51,12 @@
         {#each chats.chat as participant}
           <a href={`/chat/${participant}`} class="flex w-full gap-2 border-b border-login-button p-2 py-3">
             <div class="flex items-center">
-              <!-- <img src={logo} class="rounded-full" width="45px" alt="Open Chat"> -->
+              <img src={OpenChat} class="rounded-full" width="45px" alt="Open Chat">
             </div>
             <div class="grid items-center">
               <p class="text-white">{usernames[participant] || "Loading..."}</p>
               {#if lastMessage[participant]}
-              <p class="text-gray-500 text-sm">{lastMessage[participant]}</p>
-              <!-- {#each lastMessage[participant] as message}
-                <div class="mt-2 text-gray-500 text-sm">
-                  {message.content.replace(/\n/g, '<br>')}
-                </div>
-              {/each} -->
+                <p class="text-gray-500 text-sm">{lastMessage[participant]}</p>
               {/if}
             </div>
           </a>
@@ -80,7 +68,7 @@
       {/if}
       <!-- {/if} -->
     </div>
-    <div class="h-96 grid items-end">
+    <div class="h-96 grid w-full fixed bottom-0 items-end">
       <NavBar userId={user} />
     </div>
   </div>

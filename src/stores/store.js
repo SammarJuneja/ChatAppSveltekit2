@@ -1,8 +1,23 @@
 import mongoose from"mongoose";
 import jwt from"jsonwebtoken";
 import config from "../../config.js";
+import { writable } from "svelte/store";
 
-export const logo = "https://media.discordapp.net/attachments/916361716965707836/1277165337825251338/OpenChat.png?ex=66cc2c69&is=66cadae9&hm=7e62f9d41dbfb54c7857ee8826c900759630569fb5953adca4762a9480b90712&";
+function oldSearchResults() {
+    const { subscribe, update } = writable([]);
+
+    return {
+        subscribe,
+        add: (item) => {
+            update((array) => {
+                const newArray = [...array, item];
+                return newArray.length > 10 ? newArray.slice(-10) : newArray;
+            });
+        },
+    };
+}
+
+export const oldSearch = oldSearchResults();
 
 export const apiUrl = "http://localhost:4000/api";
 

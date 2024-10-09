@@ -8,8 +8,8 @@
     let message = "";
     let messages = [];
 
-    // Password: avbcsywS@34
-    // Email: mi2@gmail.com
+    // Email: a1@gmail.com
+    // Password: meowmeow1
 
     function send() {
         if (!message.trim()) return;
@@ -24,11 +24,9 @@
     }
 
     onMount(async() => {
-        console.log(data.chatId.chat)
         io.emit("joinChat", { chatId: data.chatId.chat[0]._id, username: data.author.userGet.username });
         io.on("fetchMessage", (msg) => {
             messages = msg;
-            console.log(messages);
         });
         io.on("newMessage", (msg) => {
             messages = [...messages, msg];
