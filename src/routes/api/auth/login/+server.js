@@ -22,7 +22,7 @@ export async function POST({ request }) {
     const decodedPass = await compare(data.password, user.password);
 
     if (!decodedPass) {
-      return json({ error: "You entered wrong password" }, { status: 400 });
+      return json({ message: "You entered wrong password" }, { status: 400 });
     }
 
     const accessToken = signAccessToken({ userId: user._id });

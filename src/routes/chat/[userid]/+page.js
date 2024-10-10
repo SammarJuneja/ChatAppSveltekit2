@@ -1,9 +1,14 @@
 import { jwtDecode } from 'jwt-decode';
 import { getChat, getUser } from '../../../lib/functions.js';
+import { goto } from '$app/navigation';
 
 export async function load({ params }) {
     const { userid } = params;
     const token = localStorage.getItem("token");
+
+    if (!token) {
+        goto(`/error/token`);
+    }
     
     try {
         const decodedToken = jwtDecode(token);

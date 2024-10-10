@@ -112,3 +112,19 @@ export async function updateUserStatus(status, token) {
   console.log(error)
 }
 }
+
+export async function search(username, token) {
+  try {
+    const response = await fetch(`${apiUrl}/user/search/${username}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+}

@@ -4,7 +4,7 @@
   import { jwtDecode } from "jwt-decode";
   import { getChat, getUser, getUserChats } from "../../lib/functions.js";
   import NavBar from "../../lib/components/+NavBar.svelte";
-  import OpenChat from "../../ui/OpenChat.png"
+  import OpenChat from "../../ui/OpenChat.png";
 
   let chats = { "chat": [] } ;
   let meow = { "chat": [] };
