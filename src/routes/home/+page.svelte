@@ -42,11 +42,6 @@
 <div class="min-h-screen bg-app-bg">
     <Header />
     <div>
-      <!-- {#if !token}
-        <div class="text-center">
-          <h2 class="text-white text-lg mt-2">Unknown user</h2>
-        </div>
-      {:else} -->
       {#if chats}
         {#each chats.chat as participant}
           <a href={`/chat/${participant}`} class="flex w-full gap-2 border-b border-login-button p-2 py-3">
@@ -66,7 +61,6 @@
           <h2 class="text-white text-lg mt-2">You don't have any chats</h2>
         </div>
       {/if}
-      <!-- {/if} -->
     </div>
     <div class="h-96 grid w-full fixed bottom-0 items-end">
       <NavBar userId={user} />
