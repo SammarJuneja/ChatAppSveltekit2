@@ -8,7 +8,7 @@
     let message = "";
     let messages = [];
 
-    // Email: a1@gmail.com
+    // Email: a1@gamil.com
     // Password: meowmeow1
 
     function send() {
@@ -48,27 +48,9 @@
         </header>
 
         <!-- main chat -->
-
-        
-                <!-- {#if data.messages && data.messages.messages.length > 0}
-                    {#each data.messages.messages as chat}
-                    <div  class={chat.sender._id === data.author.userGet._id ? "grid w-full justify-end text-right break-all pr-5" : "grid w-full justify-start text-left break-all pl-5"}>
-                        <span>
-                            <div class="my-2 ounded-md">
-                                <button class="bg-signup-button px-2 py-1 w-full max-w-52 rounded-lg break-all text-white">{chat.message}</button>
-                            </div>
-                        </span>
-                    </div>
-                    {/each}
-                {:else}
-                    <p class="text-center text-white m-10">No messages to display.</p>
-                {/if} -->
-                <!-- class="w-auto max-w-40 px-2 m-5 text-white p-1 rounded-lg break-all" -->
-                <!-- class={chat.sender._id === data.author.userGet._id ? "text-right" : "text-left"} -->
-        
-                <!-- {#if data.messages && data.messages.messages.length > 0} -->
-                <main class="flex-1 overflow-y-auto">
-                {#each messages as chat}
+        <!-- {#if data.messages && data.messages.messages.length > 0} -->
+        <main class="flex-1 overflow-y-auto">
+            {#each messages as chat}
                 <div class={chat.sender === data.author.userGet._id ? "grid w-full justify-end text-right break-all pr-5" : "grid w-full justify-start text-left break-all pl-5"}>
                     <span>
                         <div class="my-2 ounded-md">
@@ -76,8 +58,8 @@
                         </div>
                     </span>
                 </div>
-                {/each}
-                </main>
+            {/each}
+        </main>
 
         <!--  bottom bar -->
         <nav class="bottom-0 fixed border-t w-full bg-app-bg">
