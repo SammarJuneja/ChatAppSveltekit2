@@ -16,6 +16,15 @@ function socketConnection(server) {
             console.log(`${username} joined room: ${chatId}`);
         });
 
+        socket.on("typing", (data) => {
+            const { chatId, username } = data;
+            const newData = {
+                chatId: chatId,
+                username: username
+            }
+            socket.to(chatId).emit("typing", newData);
+        });
+
         socket.on("message", async (data) => {
             try {
                 const { chatId, sender, message, attachment, reaction } = data;

@@ -7,6 +7,9 @@
     export let data;
     let message = "";
     let messages = [];
+    let typingUser = null;
+    let typingTimeout;
+    let username =  data.author.userGet.username;
 
     // Email: a1@gamil.com
     // Password: meowmeow1
@@ -21,12 +24,34 @@
         io.emit("message", newMessage);
         messages = [...messages, newMessage];
         message = "";
+        clearTypingNotification();
+    }
+
+    function clearTypingNotification() {
+        typingUser = null;
+        if (typingTimeout) {
+            clearTimeout(typingTimeout);
+        }
+    }
+
+    function handleInput() {
+        const newData = {
+            chatId: data.chatId.chat[0]._id,
+            username: username
+        }
+        io.emit("typing", newData);
+        clearTimeout(typingTimeout);
+        typingTimeout = setTimeout(clearTypingNotification, 2000);
     }
 
     onMount(async() => {
         io.emit("joinChat", { chatId: data.chatId.chat[0]._id, username: data.author.userGet.username });
         io.on("fetchMessage", (msg) => {
             messages = msg;
+        });
+        io.on("typing", (data) => {
+            const { username } = data;
+            typingUser = username;
         });
         io.on("newMessage", (msg) => {
             messages = [...messages, msg];
@@ -36,6 +61,7 @@
     onDestroy(() => {
         io.off("fetchMessage");
         io.off("newMessage");
+        io.off("typing");
     });
 </script>
 
@@ -60,11 +86,14 @@
                 </div>
             {/each}
         </main>
+        {#if typingUser}
+            <div class="text-gray-500 italic">{typingUser} is typing...</div>
+        {/if}
 
         <!--  bottom bar -->
-        <nav class="bottom-0 fixed border-t w-full bg-app-bg">
+        <nav class="bottom-0 overflow-auto border-t w-full bg-app-bg">
             <div class="flex gap-2 m-3 w-full">
-                <input bind:value={message} class="rounded-full w-full text-white pl-3 outline-none bg-login-button" type="text" placeholder="Type your message here...">
+                <input bind:value={message} on:input={handleInput} class="rounded-full w-full text-white pl-3 outline-none bg-login-button" type="text" placeholder="Type your message here...">
                 <button class="p-1.5 bg-signup-button rounded-full">
                     <Icon icon="attachment" size="20px" color="white"/>
                 </button>

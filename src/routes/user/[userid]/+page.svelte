@@ -1,5 +1,6 @@
 <script>
     import { updateUserStatus, updateUserBio } from "../.../../../../lib/functions.js";
+  import NavBar from "../../../lib/components/+NavBar.svelte";
     export let data;
     let bio = data.user.userGet.bio || "";
     let status = data.user.userGet.status || "";
@@ -31,5 +32,8 @@
     <div class="border-neutral-800 grid justify-center mt-5 text-center text-white">
         <h2>Friend list</h2>
         <p>No Friends</p>
+    </div>
+    <div class="fixed bottom-0 w-full">
+        <NavBar userId={data.user.userGet._id}/>
     </div>
 </div>
